@@ -19,9 +19,32 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
+        "../node_modules/bootstrap/dist/css/bootstrap.css",
+        "../node_modules/font-awesome/css/font-awesome.css",
+        "./inspana/css/animate.css",
+        "./inspana/css/style.css",
+        "./inspana/css/plugins/iCheck/custom.css",
+        "./inspana/css/plugins/summernote/summernote.css",
+        "./inspana/css/plugins/summernote/summernote-bs3.css",
+        "./inspana/css/plugins/steps/jquery.steps.css",
+        "../node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker3.standalone.min.css",
+        "../node_modules/bootstrap-timepicker/css/bootstrap-timepicker.css",
         "styles.css"
       ],
-      "scripts": [],
+      "scripts": [
+        "../node_modules/jquery/dist/jquery.js",
+        "../node_modules/bootstrap/dist/js/bootstrap.js",
+        "../node_modules/lodash/lodash.js",
+        "./inspana/js/plugins/metisMenu/jquery.metisMenu.js",
+        "./inspana/js/plugins/slimscroll/jquery.slimscroll.min.js",
+        "./inspana/js/plugins/pace/pace.min.js",
+        "./inspana/js/plugins/iCheck/icheck.min.js",
+        "./inspana/js/plugins/summernote/summernote.min.js",
+        "./inspana/js/plugins/staps/jquery.steps.min.js",
+        "./inspana/js/inspinia.js",
+        "../node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.js",
+        "../node_modules/bootstrap-timepicker/js/bootstrap-timepicker.js"
+      ],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",

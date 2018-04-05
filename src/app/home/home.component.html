@@ -1,0 +1,36 @@
+<app-top-menu [showlinks]="false"></app-top-menu>
+<div id="home-wrapper">
+  <div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+      <div class="col-md-4">
+        <div id="nestable-menu">
+          <button type="button"
+                  (click)="createAccount()"
+                  class="btn btn-sm btn-primary">
+            <i class="glyphicon glyphicon-plus"></i>
+            &nbsp;Create Account
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="row account-users-list">
+      <div class="col-lg-3" *ngFor="let account of accounts">
+        <div class="contact-box center-version ">
+          <a href="javascript:void(0)" (click)="onCardClick(account)">
+            <h3 class="m-b-xs account-card"><strong>{{account.name}}</strong></h3>
+          </a>
+          <div class="contact-box-footer">
+            <div class="m-t-xs btn-group">
+              <button class="btn btn-xs btn-white"  (click)="onShowDetails(account);">Account Details</button>
+              <button class="btn btn-xs btn-white"
+                      (click)="editAccount(account);">Edit</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-edit-account #editAccountModal></app-edit-account>

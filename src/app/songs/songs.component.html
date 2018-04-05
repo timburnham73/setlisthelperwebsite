@@ -1,0 +1,152 @@
+<app-top-menu></app-top-menu>
+<div id="songs-page-wrapper" class="gray-bg">
+  <div class="wrapper wrapper-content  animated fadeInRight">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="ibox">
+          <div class="ibox-title">
+            <ol class="breadcrumb">
+              <li>
+                <a href="javascript:void(0)" [routerLink]="['/accounts']">{{account?.name}}</a>
+              </li>
+              <li class="active" *ngIf="!artistId && !genreId && !tagId">
+                <strong class="pull-right song-count adv-bread">{{songs?.length}} Songs</strong>
+                <strong class="simple-bread">Songs</strong>
+              </li>
+
+              <li class="active" *ngIf="artistId">
+                <a href="javascript:void(0)" [routerLink]="['/accounts', accountId, 'artists']">Artists</a>
+              </li>
+              <li class="active" *ngIf="artistId">
+                <strong>{{artist?.$value}}</strong>
+              </li>
+
+              <li class="active" *ngIf="genreId">
+                <a href="javascript:void(0)" [routerLink]="['/accounts', accountId, 'genres']">Genres</a>
+              </li>
+              <li class="active" *ngIf="genreId">
+                <strong>{{genre?.$value}}</strong>
+              </li>
+
+              <li class="active" *ngIf="tagId">
+                <a href="javascript:void(0)" [routerLink]="['/accounts', accountId, 'tags']">Tags</a>
+              </li>
+              <li class="active" *ngIf="tagId">
+                <strong>{{tag?.name}}</strong>
+              </li>
+
+            </ol>
+          </div>
+
+          <div class="ibox-content">
+
+            <div class="m-b-sm" *ngIf="!artistId && !genreId">
+
+              <div class="input-search-wrapper">
+                <input type="text" placeholder="Search by Name..."
+                       [formControl]="term"
+                       class="form-control"/>
+              </div>
+              <div class="m-t-md">
+                <div>
+                  <button type="button"
+                          (click)="addNew()"
+                          class="btn btn-sm btn-white">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    &nbsp;Add
+                  </button>
+                  <button type="button"
+                          class="btn btn-sm btn-white" [routerLink]="['/accounts',accountId, 'import']"> <i class="glyphicon glyphicon-plus"></i> Add Multiple</button>
+                  <button type="button"
+                          (click)="onExport()"
+                          class="btn btn-sm btn-white"> <i class="glyphicon glyphicon-cloud-download"></i>Export</button>
+                  <button type="button"
+                          (click)="onPrint()"
+                          class="btn btn-sm btn-white">
+                    <i class="glyphicon glyphicon-print"></i>
+                    Print
+                  </button>
+                  <strong class="pull-right song-count">{{songCount}} songs</strong>
+                </div>
+
+              </div>
+
+            </div>
+
+            <div class="row gallery-view">
+              <div class="col-lg-3" *ngFor="let song of songs">
+                <div class="contact-box center-version">
+                  <div (click)="onRowClick(song)">
+                    <h3 class="m-b-xs"><strong>{{song.name}} - {{song.artist}}</strong></h3>
+
+                    <div class="font-bold">{{song.key}}</div>
+                    <div class="font-bold">{{song.length}}</div>
+                  </div>
+
+                  <div class="contact-box-footer">
+                    <div class="m-t-xs btn-group">
+                      <button class="btn btn-white btn-xs" (click)="onEdit(song)"> Edit</button>
+                      <button class="btn btn-white btn-xs" (click)="deleteItem(song)"> Delete</button>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-hundred justify-start list-view">
+              <div class="flex flex-row flex-hundred justify-start align-center flex-wrap table-header">
+                <div class="flex-1 sortable" (click)="setSortOrder('name')">Name<i class="fa fa-long-arrow-down" *ngIf="orderByColumnName === 'name'" aria-hidden="true"></i></div>
+                <div class="flex-twenty sortable" (click)="setSortOrder('artist')">Artist<i class="fa fa-long-arrow-down" *ngIf="orderByColumnName === 'artist'" aria-hidden="true"></i></div>
+                <div class="flex-fifteen">
+                  Genre
+                </div>
+                <div class="flex-fifteen sortable" (click)="setSortOrder('length')">
+                  Length
+                  <i class="fa fa-long-arrow-down" *ngIf="orderByColumnName === 'length'" aria-hidden="true"></i>
+                </div>
+                <div class="flex-ten sortable" (click)="setSortOrder('tempo')">
+                  Tempo
+                  <i class="fa fa-long-arrow-down" *ngIf="orderByColumnName === 'tempo'" aria-hidden="true"></i>
+                </div>
+                <div class="flex-five sortable" (click)="setSortOrder('key')">Key<i class="fa fa-long-arrow-down" *ngIf="orderByColumnName === 'key'" aria-hidden="true"></i></div>
+                <div class="flex-fifteen">&nbsp;</div>
+              </div>
+              <div class="table-content-wrapper">
+                <div class="flex flex-row flex-hundred justify-start align-center flex-wrap table-content"
+                     *ngFor="let song of songs"
+                  >
+                  <div class="flex-1" (click)="onRowClick(song)">
+                    {{ song.Name}}
+                  </div>
+                  <div class="flex-twenty">
+                    {{ song.Artist?.Name}}
+                  </div>
+                  <div class="flex-fifteen">
+                    {{ song.Genre?.Name}}
+                  </div>
+                  <div class="flex-fifteen">
+                    {{ song.SongLength | secondsToMinutes}}
+                  </div>
+                  <div class="flex-ten">
+                    {{ song.Tempo}}
+                  </div>
+                  <div class="flex-five">
+                    {{ song.Key}}
+                  </div>
+                  <div class="flex-fifteen pull-right">
+                    <button class="btn btn-white btn-xs" (click)="onEdit(song)"> Edit</button>
+                    <button class="btn btn-white btn-xs" (click)="deleteItem(song)"> Delete</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+

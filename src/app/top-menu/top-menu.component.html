@@ -1,0 +1,49 @@
+<div class="row border-bottom white-bg top-menu">
+  <nav class="navbar navbar-static-top" role="navigation">
+    <div class="navbar-header">
+      <button aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
+        <i class="fa fa-reorder"></i>
+      </button>
+      <a href="javascript:void(0)" routerLink="/accounts" class="navbar-brand">Setlist Helper</a>
+    </div>
+
+    <div class="navbar-collapse collapse" id="navbar">
+      <ul class="nav navbar-nav" *ngIf="authService.authenticated && showlinks">
+        <li routerLinkActive="active">
+          <a aria-expanded="false" role="button" [routerLink]="['/accounts',accountId,'songs']"><i class="fa fa-music"></i> Songs</a>
+        </li>
+        <li routerLinkActive="active">
+          <a aria-expanded="false" role="button" [routerLink]="['/accounts', accountId, 'setlists']"><i class="fa fa-list-ol"></i> Setlists</a>
+        </li>
+        <li routerLinkActive="active">
+          <a aria-expanded="false" role="button" [routerLink]="['/accounts',accountId,'artists']"><i class="fa fa-id-card"></i> Artists</a>
+        </li>
+        <li routerLinkActive="active">
+          <a aria-expanded="false" role="button" [routerLink]="['/accounts',accountId,'genres']"><i class="fa fa-book"></i> Genres</a>
+        </li>
+        <li routerLinkActive="active">
+          <a aria-expanded="false" role="button" [routerLink]="['/accounts',accountId,'tags']"><i class="fa fa-tag"></i> Tags</a>
+        </li>
+        <li>
+        </li>
+      </ul>
+      <ul class="nav navbar-top-links navbar-right">
+        <li class="dropdown">
+          <a aria-expanded="true" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> {{user?.emailAddress}} <span class="caret"></span></a>
+          <ul role="menu" class="dropdown-menu">
+            <li><a href="javascript:void(0)" (click)="onEditProfile()">Edit Profile</a></li>
+            <li><a href="javascript:void(0)" (click)="onChangePassword()">Change Password</a></li>
+            <li>
+              <a routerLinkActive="menu-active"  routerLink="/register"
+                 *ngIf="!authService.authenticated && router.url === '/login'">Register</a>
+            </li>
+            <li>
+              <a *ngIf="authService.authenticated" (click)="logout()">Logout</a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</div>
+

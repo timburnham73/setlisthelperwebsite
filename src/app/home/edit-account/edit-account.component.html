@@ -1,0 +1,28 @@
+<div id="edit-account-wrapper">
+  <bs-modal #editAccountModal [size]="sm">
+    <bs-modal-header [showDismiss]="true">
+      <h4 *ngIf="isNew" class="modal-title">Edit Account</h4>
+      <h4 *ngIf="!isNew" class="modal-title">Create Account</h4>
+    </bs-modal-header>
+    <bs-modal-body>
+      <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+          <div class="col-lg-12">
+            <form autocomplete="off" novalidate class="m-t" role="form" [formGroup]="myForm">
+              <div class="form-group">
+                <input type="text" class="form-control" placeholder="Account name" formControlName="name">
+                <div class="field-error-message" *ngIf="isErrorVisible('name','required')">Account name is required</div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </bs-modal-body>
+    <bs-modal-footer>
+      <button type="button" class="btn btn-default" data-dismiss="modal" (click)="close()">Cancel</button>
+      <button class="btn btn-primary"
+              (click)="save(myForm.value, myForm.valid)"
+              [disabled]="!myForm.valid">Save</button>
+    </bs-modal-footer>
+  </bs-modal>
+</div>
