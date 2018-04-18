@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import {appRoutingProviders, AppRoutes} from './app.routes';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
 import { AppComponent } from './app.component';
 import {SongsComponent} from './songs';
@@ -17,7 +18,6 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {secondsToMinutesPipe} from './shared/pipes/secondsToMinutes';
 import {CommonModule} from '@angular/common';
 import {DragulaModule} from 'ng2-dragula';
-import {InfiniteScrollModule} from 'angular2-infinite-scroll';
 import { BsModalModule } from 'ng2-bs3-modal/ng2-bs3-modal';
 import {AuthService} from './shared/security/auth.service';
 

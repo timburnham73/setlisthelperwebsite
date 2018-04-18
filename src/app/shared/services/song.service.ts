@@ -42,9 +42,9 @@ export class SongService {
       .take(1);
   }
 
-  findAllSongs(): Observable<Song[]> {
+  findAllSongs(startIndex, numberOfSongsToGet): Observable<Song[]> {
     const options = this.getAuthTokenInfo();
-    return this._http.get<Song[]>(this.actionUrl + '?start=50&records=50', options)
+    return this._http.get<Song[]>(this.actionUrl + `?start=${startIndex}&records=${numberOfSongsToGet}`, options)
       .pipe(
         catchError(this.handleError)
       );

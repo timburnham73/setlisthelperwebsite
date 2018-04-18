@@ -37,6 +37,8 @@ export class SongsComponent implements OnInit {
   tagId: string;
   tag: Tag;
   songCount: number;
+  startingIndex: number;
+  pageSize: number;
 
   public account: Account;
 
@@ -50,9 +52,12 @@ export class SongsComponent implements OnInit {
               private route: ActivatedRoute
 
   ) {
+    // Used to setup paging when retrieving songs
+    this.songs = [];
+    this.startingIndex = 0;
+    this.pageSize = 50;
     this.searchString = '';
     this.orderByColumnName = 'name';
-
     this.term.valueChanges
       .debounceTime(400)
       .subscribe(term => this.onSearch(term));
@@ -96,13 +101,20 @@ export class SongsComponent implements OnInit {
       this.tagService.getSongs(this.tagId)
         .subscribe(songs => this.songs = songs);
     } else {*/
-      this.songService.findAllSongs()
+      this.songService.findAllSongs(this.startingIndex, this.pageSize)
         .map((songs) => {
           return songs.filter(song => ((termToSearch === '')
             || (termToSearch && song.name.toLowerCase().includes(termToSearch.toLowerCase()))));
         })
-        .subscribe(songs => this.songs = songs);
+        .do(songs => console.log(`Song count ${this.songs.length + songs.length}`))
+        .subscribe(songs => this.songs = this.songs.concat(songs));
     // }
+  }
+
+  onScroll() {
+    this.startingIndex = this.startingIndex + 50;
+    this.onSearch('');
+    console.log(this.songs.length);
   }
 
   onPrint() {
