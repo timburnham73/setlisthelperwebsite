@@ -10,7 +10,7 @@
                 <a href="javascript:void(0)" [routerLink]="['/accounts']">{{account?.name}}</a>
               </li>
               <li class="active" *ngIf="!artistId && !genreId && !tagId">
-                <strong class="pull-right song-count adv-bread">{{songs?.length}} Songs</strong>
+                <strong class="pull-right song-count adv-bread">{{songCount}} Songs</strong>
                 <strong class="simple-bread">Songs</strong>
               </li>
 
@@ -66,11 +66,9 @@
                     <i class="glyphicon glyphicon-print"></i>
                     Print
                   </button>
-                  <strong class="pull-right song-count">{{songs?.length}} songs</strong>
+                  <strong class="pull-right song-count">{{songCount}} songs</strong>
                 </div>
-
               </div>
-
             </div>
 
             <div class="row gallery-view">

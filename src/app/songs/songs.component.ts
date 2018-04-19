@@ -82,9 +82,11 @@ export class SongsComponent implements OnInit {
       if (this.tagId) {
 
       }
-      /*this.songService.getSongCount()
+      this.songService.getSongCount()
         .do(x => console.log(`Song count total ${x}`))
-        .subscribe(count => this.songCount = count);*/
+        .subscribe(count => {
+          this.songCount = Number(count);
+        });
 
       this.onSearch('');
     });
@@ -114,7 +116,6 @@ export class SongsComponent implements OnInit {
   onScroll() {
     this.startingIndex = this.startingIndex + 50;
     this.onSearch('');
-    console.log(this.songs.length);
   }
 
   onPrint() {
