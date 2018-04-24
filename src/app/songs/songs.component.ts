@@ -9,6 +9,7 @@ import {Tag} from '../shared/model/tag';
 import {SongService} from '../shared/services/song.service';
 import {AuthService} from '../shared/security/auth.service';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {SongEditComponent} from '../song-edit';
 
 
 
@@ -20,7 +21,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
   styleUrls: ['songs.component.less']
 })
 export class SongsComponent implements OnInit {
-  // @ViewChild('songEdit') songEdit: SongEditComponent;
+  @ViewChild('songEdit') songEdit: SongEditComponent;
   // @ViewChild('songLyric') songLyric: SongLyricComponent;
   // @ViewChild('songCatalogSelector') songCatalogSelctor:SongCatalogSelectorComponent;
 
@@ -119,7 +120,7 @@ export class SongsComponent implements OnInit {
   }
 
   onPrint() {
-    this.get('http://setlisthelperstage.com/api/Song6')
+    this.get('http://setlisthelper.com/api/Song6')
       .subscribe(function(result) {
 
       },
@@ -144,7 +145,7 @@ export class SongsComponent implements OnInit {
   }
 
   onEdit(song) {
-    // this.songEdit.open(song);
+    this.songEdit.open(song);
   }
 
 

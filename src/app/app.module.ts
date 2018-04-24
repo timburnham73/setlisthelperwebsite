@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {NgModule, OnInit} from '@angular/core';
 import {appRoutingProviders, AppRoutes} from './app.routes';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 
@@ -18,8 +18,10 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {secondsToMinutesPipe} from './shared/pipes/secondsToMinutes';
 import {CommonModule} from '@angular/common';
 import {DragulaModule} from 'ng2-dragula';
-import { BsModalModule } from 'ng2-bs3-modal/ng2-bs3-modal';
+import { BsModalModule } from 'ng2-bs3-modal';
 import {AuthService} from './shared/security/auth.service';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {SongEditComponent} from './song-edit/song-edit.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,9 @@ import {AuthService} from './shared/security/auth.service';
     secondsToMinutesPipe,
     TopMenuComponent,
     RegisterComponent,
-    EditAccountComponent
+    EditAccountComponent,
+    SongEditComponent
+
   ],
   imports: [
     BrowserModule,
@@ -45,7 +49,8 @@ import {AuthService} from './shared/security/auth.service';
     DragulaModule,
     ReactiveFormsModule,
     InfiniteScrollModule,
-    BsModalModule
+    BsModalModule,
+    BrowserAnimationsModule
   ],
   providers: [
     appRoutingProviders,

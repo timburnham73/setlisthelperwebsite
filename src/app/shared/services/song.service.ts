@@ -19,7 +19,7 @@ export class SongService {
   constructor(
     private _http: HttpClient,
   ) {
-    this.actionUrl = 'https://setlisthelperstage.azurewebsites.net/api/v2.0/Song';
+    this.actionUrl = 'https://setlisthelper.azurewebsites.net/api/v2.0/Song';
   }
 
   getAuthTokenInfo() {
@@ -78,11 +78,15 @@ export class SongService {
 
   }*/
 
-  /*getSong(songId: string, accountId): Observable<Song> {
-
+  getSong(songId: string): Observable<Song> {
+    const options = this.getAuthTokenInfo();
+    return this._http.get<Song[]>(this.actionUrl + `?id=${songId}`, options)
+      .pipe(
+        catchError(this.handleError)
+      );
   }
 
-  getSongsNotInSetlist(songIds, songToSearchFor, accountId) {
+  /*getSongsNotInSetlist(songIds, songToSearchFor, accountId) {
     this.db.list(`/songs`, {
       query: {
         orderByChild: 'name'
