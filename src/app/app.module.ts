@@ -22,6 +22,7 @@ import { BsModalModule } from 'ng2-bs3-modal';
 import {AuthService} from './shared/security/auth.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {SongEditComponent} from './song-edit/song-edit.component';
+import {SLHHttpClient} from './shared/web/HttpClient';
 
 @NgModule({
   declarations: [
@@ -56,7 +57,8 @@ import {SongEditComponent} from './song-edit/song-edit.component';
     appRoutingProviders,
     SongService,
     AuthGuard,
-    AuthService
+    AuthService,
+    SLHHttpClient
   ],
   bootstrap: [AppComponent]
 })

@@ -32,20 +32,52 @@ export class SongEditComponent implements OnInit {
   ngOnInit() {
     this.isNew = false;
     this.accountId = 'someguid';
-    this.song = new Song('', this.accountId, '', '', '', '', 120, 300, false, '', '');
+    const songLength = 180;
+    const songLengthMinSec = Song.getSongLengthMinSec(songLength);
+    this.song = new Song('',
+      '',
+      '',
+      '',
+      'A',
+      songLength,
+      120,
+      false,
+      false,
+      '',
+      '',
+      new Date().toISOString(),
+      0,
+      '',
+      4,
+      4,
+      0,
+      '',
+      '',
+      '',
+      '',
+      '',
+      songLengthMinSec.minutes,
+      songLengthMinSec.seconds
+      );
     // this.artists = this.af.database.list('/artists');
 
     this.myForm = this.fb.group({
       name: ['', [<any>Validators.required, <any>Validators.minLength(1)]],
-      artist: ['', [<any>Validators.required, <any>Validators.minLength(1), <any>Validators.maxLength(255)]],
-      genre: ['', [<any>Validators.minLength(1), <any>Validators.maxLength(255)]],
-      songKey: ['', [<any>Validators.maxLength(5), <any>Validators.minLength(1)]],
+      artistName: ['', [<any>Validators.required, <any>Validators.minLength(1), <any>Validators.maxLength(255)]],
+      genreName: ['', [<any>Validators.minLength(1), <any>Validators.maxLength(255)]],
+      key: ['', [<any>Validators.maxLength(5), <any>Validators.minLength(1)]],
       lengthMin: ['', []],
       lengthSec: ['', []],
       lyrics: ['', []],
       tempo: ['', []],
       notes: ['', [<any>Validators.minLength(1)]],
-      other: ['', [<any>Validators.minLength(1)]]
+      other: ['', [<any>Validators.minLength(1)]],
+      songLocation: ['', []],
+      createdByUserId: ['', []],
+      blob: ['', []],
+      documentLocation: ['', []],
+      songId: ['', []],
+      songType: ['', []]
     });
     this.sub = this.route.params.subscribe(params => {
       const id: string = params['songid'];
@@ -59,20 +91,20 @@ export class SongEditComponent implements OnInit {
     this.myForm.reset();
 
     (<FormControl>this.myForm.controls['name'])
-      .setValue(song.Name, {onlySelf: true});
+      .setValue(song.name, {onlySelf: true});
 
-    (<FormControl>this.myForm.controls['artist'])
-      .setValue(song.Artist && song.Artist.Name ? song.Artist.Name : '', {onlySelf: true});
+    (<FormControl>this.myForm.controls['artistName'])
+      .setValue(song.artistName && song.artistName ? song.artistName : '', {onlySelf: true});
 
-    (<FormControl>this.myForm.controls['genre'])
-      .setValue(song.Genre && song.Genre ? song.Genre : '', {onlySelf: true});
+    (<FormControl>this.myForm.controls['genreName'])
+      .setValue(song.genreName && song.genreName ? song.genreName : '', {onlySelf: true});
 
-    (<FormControl>this.myForm.controls['songKey'])
-      .setValue(song.SongKey ? song.SongKey : '' , {onlySelf: true});
+    (<FormControl>this.myForm.controls['key'])
+      .setValue(song.key ? song.key : '' , {onlySelf: true});
 
-    if (song.Length) {
-      const lengthMin = Math.floor(song.Length / 60);
-      const lengthSec = song.Length % 60;
+    if (song.songLength) {
+      const lengthMin = Math.floor(song.songLength / 60);
+      const lengthSec = song.songLength % 60;
       (<FormControl>this.myForm.controls['lengthMin'])
         .setValue(lengthMin, {onlySelf: true});
 
@@ -87,67 +119,59 @@ export class SongEditComponent implements OnInit {
     }
 
     (<FormControl>this.myForm.controls['tempo'])
-      .setValue(song.Tempo ? song.Tempo : 120 , {onlySelf: true});
+      .setValue(song.tempo ? song.tempo : 120 , {onlySelf: true});
 
     (<FormControl>this.myForm.controls['lyrics'])
-      .setValue(song.Lyrics ? song.Lyrics : '', {onlySelf: true});
+      .setValue(song.lyrics ? song.lyrics : '', {onlySelf: true});
 
     (<FormControl>this.myForm.controls['notes'])
-      .setValue(song.Notes ? song.Notes : '', {onlySelf: true});
+      .setValue(song.notes ? song.notes : '', {onlySelf: true});
 
     (<FormControl>this.myForm.controls['other'])
-      .setValue(song.Other ? song.Other : '', {onlySelf: true});
+      .setValue(song.other ? song.other : '', {onlySelf: true});
 
 
-    this.isNew = song.SongId ? false : true;
+
+    (<FormControl>this.myForm.controls['songLocation'])
+      .setValue(song.SongLocation ? song.SongLocation : '', {onlySelf: true});
+
+    (<FormControl>this.myForm.controls['createdByUserId'])
+      .setValue(song.CreatedByUserId ? song.CreatedByUserId : '', {onlySelf: true});
+
+    (<FormControl>this.myForm.controls['blob'])
+      .setValue(song.Blob ? song.Blob : '', {onlySelf: true});
+
+    (<FormControl>this.myForm.controls['documentLocation'])
+      .setValue(song.other ? song.other : '', {onlySelf: true});
+
+    (<FormControl>this.myForm.controls['songId'])
+      .setValue(song.songId ? song.songId : '', {onlySelf: true});
+
+    (<FormControl>this.myForm.controls['songType'])
+      .setValue(song.songType === null ? song.songType : 0, {onlySelf: true});
+
+    this.isNew = !song.songId;
 
 
   }
 
-  save(name: string,
-       length: string,
-       key: string,
-       tempo: string,
-       artist: string,
-       genre: string,
-       lyrics: string,
-       notes: string,
-       other: string
-  ) {
+  save(model, isValid: boolean) {
+
+    model.LengthMin = model.LengthMin * 60;
+    model.LengthMin += model.LengthMin;
+    delete model.LengthMin;
+    delete model.LengthSec;
+
     if (this.isNew === true) {
-
-      // this.artists.map( artists => artists.filter(artist => artist.name === artist.name));
-
-      // let newItemKey = this.songs.push({name: name, length: length, key: key, tempo: tempo, lyrics: lyrics, uid: this.uid}).key;
-
-
+      // model.createDate = new Date();
+      // this.songId = this.songService.createSong(model);
     } else {
-
-      this.getOrCreateArtist(artist).then(
-        function(result) {
-          let artistKey;
-          if (result) {
-            artistKey = result['$key'];
-          } else {
-            artistKey = this.artists.set({name: artist}).key;
-          }
-
-          /*const user = this.af.database.object(`users/${login}`);
-          user.subscribe(data => {
-            if(data.$value !== null) {
-              console.log('User does not exist');
-            } else {
-              console.log('User does exist');
-            }
-          });*/
-
-          // this.song.update({name: name, length: length, key: key, tempo: tempo, lyrics: lyrics, artistId: artistKey});
-        }
-      );
-
+      // const songForUpdate: Song = Song.fromJson(model);
+      this.songService.updateSong(model.songId, model)
+        .do(updatedSong => console.log(`update song ${updatedSong}`))
+        .subscribe(updatedSong => {});
     }
-
-    this.router.navigate(['/songs']);
+    this.modal.close();
   }
 
   getOrCreateArtist(name: string) {
@@ -171,8 +195,8 @@ export class SongEditComponent implements OnInit {
 
     this.songService.getSong(String(song.SongId))
       .subscribe(songFromService => {
-        this.song = song;
-        this.loadSong(songFromService);
+        this.song = Song.fromJson(songFromService);
+        this.loadSong(this.song);
       });
     this.modal.open('sm');
   }

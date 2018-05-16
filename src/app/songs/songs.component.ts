@@ -74,11 +74,11 @@ export class SongsComponent implements OnInit {
       // `this.accountService.getAccount(this.accountId).subscribe(account => this.account = account);
       /*if (this.artistId) {
         this.artistService.getArtist(this.artistId.toLowerCase())
-          .subscribe(artist => this.artist = artist);
+7          .subscribe(ArtistName => this.ArtistName = ArtistName);
       }*/
       /*if (this.genreId) {
         this.genreService.getGenre(this.genreId.toLowerCase())
-          .subscribe(genre => this.genre = genre);
+          .subscribe(GenreName => this.GenreName = GenreName);
       }*/
       if (this.tagId) {
 
@@ -110,7 +110,10 @@ export class SongsComponent implements OnInit {
             || (termToSearch && song.name.toLowerCase().includes(termToSearch.toLowerCase()))));
         })
         .do(songs => console.log(`Song count ${this.songs.length + songs.length}`))
-        .subscribe(songs => this.songs = this.songs.concat(songs));
+        .subscribe(songs => {
+          this.songs = this.songs.concat(songs);
+          console.log(this.songs);
+        });
     // }
   }
 

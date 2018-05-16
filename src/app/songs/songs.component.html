@@ -75,10 +75,10 @@
               <div class="col-lg-3" *ngFor="let song of songs">
                 <div class="contact-box center-version">
                   <div (click)="onRowClick(song)">
-                    <h3 class="m-b-xs"><strong>{{song.name}} - {{song.artist}}</strong></h3>
+                    <h3 class="m-b-xs"><strong>{{song.Name}} - {{song.ArtistName}}</strong></h3>
 
                     <div class="font-bold">{{song.key}}</div>
-                    <div class="font-bold">{{song.length}}</div>
+                    <div class="font-bold">{{song.SongLength}}</div>
                   </div>
 
                   <div class="contact-box-footer">
@@ -95,7 +95,7 @@
             <div class="flex-hundred justify-start list-view">
               <div class="flex flex-row flex-hundred justify-start align-center flex-wrap table-header">
                 <div class="flex-1 sortable" (click)="setSortOrder('name')">Name<i class="fa fa-long-arrow-down" *ngIf="orderByColumnName === 'name'" aria-hidden="true"></i></div>
-                <div class="flex-twenty sortable" (click)="setSortOrder('artist')">Artist<i class="fa fa-long-arrow-down" *ngIf="orderByColumnName === 'artist'" aria-hidden="true"></i></div>
+                <div class="flex-twenty sortable" (click)="setSortOrder('ArtistName')">Artist<i class="fa fa-long-arrow-down" *ngIf="orderByColumnName === 'ArtistName'" aria-hidden="true"></i></div>
                 <div class="flex-fifteen">
                   Genre
                 </div>

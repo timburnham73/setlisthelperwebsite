@@ -5,9 +5,11 @@ import {Observable} from 'rxjs/Observable';
 import {Song} from '../model/song';
 import {SongLyric} from '../model/song-lyric';
 import {UserSongLyric} from '../model/user-song-lyric';
-import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
+
 import {catchError} from 'rxjs/operators';
 import {ErrorObservable} from 'rxjs/observable/ErrorObservable';
+import {SLHHttpClient} from '../web/HttpClient';
+import {HttpErrorResponse} from '@angular/common/http';
 declare var _: any;
 declare var $: any;
 
@@ -17,34 +19,18 @@ export class SongService {
   actionUrl: string;
 
   constructor(
-    private _http: HttpClient,
+    private _http: SLHHttpClient,
   ) {
     this.actionUrl = 'https://setlisthelper.azurewebsites.net/api/v2.0/Song';
   }
 
-  getAuthTokenInfo() {
-    const jwt = localStorage.getItem('authToken');
-    let httpOptions;
-    if (jwt) {
-      httpOptions = {
-        headers: new HttpHeaders({
-          'Content-Type':  'application/x-www-form-urlencoded',
-          'Authorization':  'Bearer ' + jwt,
-        })
-      };
-    }
-    return httpOptions;
-  }
-
   getSongCount() {
-    const options = this.getAuthTokenInfo();
-    return this._http.get(this.actionUrl + '?action=count', options)
+    return this._http.get(this.actionUrl + '?action=count')
       .take(1);
   }
 
   findAllSongs(startIndex, numberOfSongsToGet): Observable<Song[]> {
-    const options = this.getAuthTokenInfo();
-    return this._http.get<Song[]>(this.actionUrl + `?start=${startIndex}&records=${numberOfSongsToGet}`, options)
+    return this._http.get(this.actionUrl + `?start=${startIndex}&records=${numberOfSongsToGet}`)
       .pipe(
         catchError(this.handleError)
       );
@@ -78,9 +64,18 @@ export class SongService {
 
   }*/
 
-  getSong(songId: string): Observable<Song> {
-    const options = this.getAuthTokenInfo();
-    return this._http.get<Song[]>(this.actionUrl + `?id=${songId}`, options)
+  getSong(songId: string): Observable<any> {
+    return this._http.get(this.actionUrl + `?id=${songId}`)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  updateSong(songId: string, song: Song) {
+    song.lastEdit = new Date().toISOString();
+    song.songId = songId;
+    const songJson = Song.toJson(song);
+    return this._http.put(this.actionUrl, songJson)
       .pipe(
         catchError(this.handleError)
       );
@@ -89,12 +84,12 @@ export class SongService {
   /*getSongsNotInSetlist(songIds, songToSearchFor, accountId) {
     this.db.list(`/songs`, {
       query: {
-        orderByChild: 'name'
+        orderByChild: 'Name'
       }
     })
       .map((songs) => {
         return songs.filter(song => song.uid === accountId && !_.includes(songIds, song.$key)
-        && song.name.toLowerCase().indexOf(songToSearchFor) !== -1)
+        && song.Name.toLowerCase().indexOf(songToSearchFor) !== -1)
           .map((song) => {
             return song;
           });
@@ -103,15 +98,15 @@ export class SongService {
 
   //Returns the song key
   createSong(song: Song): string {
-    const songKey = this.db.list('songs').push(song).key;
-    this.artistService.createArtistIfItDoesNotExist(songKey, song.accountId, song.artist);
-    this.genreService.createGenreIfItDoesNotExist(songKey, song.accountId, song.genre);
-    return songKey;
+    const SongKey = this.db.list('songs').push(song).key;
+    this.artistService.createArtistIfItDoesNotExist(SongKey, song.accountId, song.ArtistName);
+    this.genreService.createGenreIfItDoesNotExist(SongKey, song.accountId, song.GenreName);
+    return SongKey;
   }
 
   //Returns the song key
   createSongIfItDoesNotExist(song: Song) {
-    this.findSongByName(song.name)
+    this.findSongByName(song.Name)
       .take(1)
       .subscribe(
       (result) => {
@@ -136,11 +131,11 @@ export class SongService {
     return songLyric$.update(songLyricKey, songLyricForUpdate);
   }
 
-  updateSong(songKey: string, song: Song) {
-    const song$ = this.db.object('/songs/' + songKey);
+  updateSong(SongKey: string, song: Song) {
+    const song$ = this.db.object('/songs/' + SongKey);
     const songToUpdate = _.clone(song, true);
-    this.artistService.createArtistIfItDoesNotExist(songKey, song.accountId, song.artist);
-    this.genreService.createGenreIfItDoesNotExist(songKey, song.accountId, song.genre);
+    this.artistService.createArtistIfItDoesNotExist(SongKey, song.accountId, song.ArtistName);
+    this.genreService.createGenreIfItDoesNotExist(SongKey, song.accountId, song.GenreName);
     delete songToUpdate.$key;
     return song$.update(songToUpdate);
   }
@@ -158,11 +153,11 @@ export class SongService {
 
 
 
-  findSongByName(name: string) {
+  findSongByName(Name: string) {
     return this.db.list('songs', {
       query: {
-        orderByChild: 'name',
-        equalTo: name
+        orderByChild: 'Name',
+        equalTo: Name
       }
     }).map(Song.fromJsonArray)
       .take(1);
@@ -178,24 +173,24 @@ export class SongService {
       .map(Song.fromJsonArray);
   }
 
-  loadNextPage(songKey: string, pageSize: number): Observable<Song[]> {
+  loadNextPage(SongKey: string, pageSize: number): Observable<Song[]> {
 
     return this.db.list('songs', {
       query: {
         orderByKey: true,
-        startAt: songKey,
+        startAt: SongKey,
         limitToFirst: pageSize + 1
       }
     })
       .map(songs => songs.slice(1, songs.length));
   }
 
-  loadPreviousPage(songKey: string, pageSize: number): Observable<Song[]> {
+  loadPreviousPage(SongKey: string, pageSize: number): Observable<Song[]> {
 
     return this.db.list('songs', {
       query: {
         orderByKey: true,
-        endAt: songKey,
+        endAt: SongKey,
         limitToLast: pageSize + 1
       }
     })
