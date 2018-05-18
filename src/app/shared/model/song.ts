@@ -1,30 +1,32 @@
 
 export class Song {
   constructor(
-    public songId: string,
-    public name: string,
-    public artistName: string,
-    public genreName: string,
-    public key: string,
-    public songLength: number,
-    public tempo: number,
-    public deleted: boolean,
-    public deprecated: boolean,
-    public notes: string,
-    public other: string,
-    public lastEdit: string,
-    public songType: number,
-    public lyrics: string,
-    public noteValue: number,
-    public beatValue: number,
-    public transpose: number,
-    public youTubeUrl: string,
-    public songLocation: string,
-    public createdByUserId: string,
-    public blob: string,
-    public documentLocation: string,
-    public lengthMin: number,
-    public lengthSec: number
+    public SongId: string,
+    public Name: string,
+    public ArtistName: string,
+    public GenreName: string,
+    public Key: string,
+    public SongLength: number,
+    public Tempo: number,
+    public Deleted: boolean,
+    public Deprecated: boolean,
+    public Notes: string,
+    public Other: string,
+    public LastEdit: string,
+    public SongType: number,
+    public Lyrics: string,
+    public NoteValue: number,
+    public BeatValue: number,
+    public Transpose: number,
+    public YouTubeUrl: string,
+    public SongLocation: string,
+    public CreatedByUserId: string,
+    public Blob: string,
+    public DocumentLocation: string,
+    public LengthMin: number,
+    public LengthSec: number,
+    public Artist: object,
+    public Genre: object,
     ) {
   }
 
@@ -36,35 +38,35 @@ export class Song {
 
   static toJson(song: Song) {
     return {
-      'songId': song.songId,
-      'songType': song.songType == null ? song.songType : 0,
-      'name': song.name ? song.name : '',
-      'artistName': song.artistName ? song.artistName : '',
-      'genreName': song.genreName ? song.genreName : '',
-      'songLength': song.songLength ? song.songLength : '',
-      'deprecated': song.deprecated ? song.deprecated : '',
-      'deleted': song.deleted ? song.deleted : '',
-      'key': song.key ? song.key : '',
-      'notes': song.notes ? song.notes : '',
-      'lyrics': song.lyrics ? song.lyrics : '',
-      'lastEdit': song.lastEdit ? song.lastEdit : '',
-      'tempo': song.tempo ? song.tempo : '',
-      'noteValue': song.noteValue ? song.noteValue : '',
-      'beatValue': song.beatValue ? song.beatValue : '',
-      'transpose': song.transpose ? song.transpose : '',
-      'other': song.other ? song.other : '',
-      'youTubeUrl': song.youTubeUrl ? song.youTubeUrl : '',
-      'createdByUserId': song.createdByUserId,
-      'blob': song.blob,
-      'songLocation': song.songLocation,
-      'documentLocation': song.documentLocation
+      'SongId': song.SongId,
+      'SongType': song.SongType == null ? song.SongType : 0,
+      'Name': song.Name ? song.Name : '',
+      'ArtistName': song.ArtistName ? song.ArtistName : '',
+      'GenreName': song.GenreName ? song.GenreName : '',
+      'SongLength': song.SongLength !== null ? song.SongLength : '',
+      'Deprecated': song.Deprecated ? song.Deprecated : '',
+      'Deleted': song.Deleted ? song.Deleted : '',
+      'Key': song.Key ? song.Key : '',
+      'Notes': song.Notes ? song.Notes : '',
+      'Lyrics': song.Lyrics ? song.Lyrics : '',
+      'LastEdit': song.LastEdit ? song.LastEdit : '',
+      'Tempo': song.Tempo !== null ? song.Tempo : '',
+      'NoteValue': song.NoteValue ? song.NoteValue : '',
+      'BeatValue': song.BeatValue ? song.BeatValue : '',
+      'Transpose': song.Transpose ? song.Transpose : '',
+      'Other': song.Other ? song.Other : '',
+      'YouTubeUrl': song.YouTubeUrl ? song.YouTubeUrl : '',
+      'CreatedByUserId': song.CreatedByUserId,
+      'Blob': song.Blob,
+      'SongLocation': song.SongLocation,
+      'DocumentLocation': song.DocumentLocation
     };
   }
 
-  public static getSongLengthMinSec(songLength) {
+  public static getSongLengthMinSec(SongLength) {
     return {
-      minutes: Math.floor(songLength / 60),
-      seconds: songLength % 60
+      minutes: Math.floor(SongLength / 60),
+      seconds: SongLength % 60
     };
   }
   static fromJson({SongId,
@@ -91,41 +93,43 @@ export class Song {
                     DocumentLocation
   }
   ): Song {
-    let artistName = '';
-    let genreName = '';
+    let ArtistName = '';
+    let GenreName = '';
     if (Artist) {
-      artistName = Artist.Name;
+      ArtistName = Artist.Name;
     }
     if (Genre) {
-      genreName = Genre.Name;
+      GenreName = Genre.Name;
     }
 
     const songLengthMinSec = Song.getSongLengthMinSec(SongLength);
     return new Song(
       SongId,
       Name,
-      artistName,
-      genreName,
+      ArtistName,
+      GenreName,
       Key,
-      SongLength && 180,
-      Tempo && 120,
-      Deleted && false,
-      Deprecated && false,
+      SongLength || 180,
+      Tempo || 120,
+      Deleted || false,
+      Deprecated || false,
       Notes,
       Other ,
-      LastEdit && new Date().toISOString(),
-      SongType && 0,
+      LastEdit || new Date().toISOString(),
+      SongType || 0,
       Lyrics ,
-      NoteValue && 4,
-      BeatValue && 4,
-      Transpose && 0,
+      NoteValue || 4,
+      BeatValue || 4,
+      Transpose || 0,
       YouTubeUrl ,
       SongLocation,
       CreatedByUserId,
       Blob,
       DocumentLocation,
       songLengthMinSec.minutes,
-      songLengthMinSec.seconds
+      songLengthMinSec.seconds,
+      {},
+      {}
     );
   }
 }

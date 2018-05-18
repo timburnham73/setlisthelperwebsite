@@ -1,4 +1,4 @@
-import {Component, OnInit, AfterViewInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 
 import {Observable} from 'rxjs/Observable';
@@ -27,6 +27,7 @@ export class SongsComponent implements OnInit {
 
   items: Observable<Song[]>;
   songs: Song[];
+  songForEdit: Song;
   searchString: string;
   term = new FormControl();
   orderByColumnName: string;
@@ -107,9 +108,9 @@ export class SongsComponent implements OnInit {
       this.songService.findAllSongs(this.startingIndex, this.pageSize)
         .map((songs) => {
           return songs.filter(song => ((termToSearch === '')
-            || (termToSearch && song.name.toLowerCase().includes(termToSearch.toLowerCase()))));
+            || (termToSearch && song.Name.toLowerCase().includes(termToSearch.toLowerCase()))));
         })
-        .do(songs => console.log(`Song count ${this.songs.length + songs.length}`))
+        // .do(songs => console.log(`Song count ${this.songs.length + songs.length}`))
         .subscribe(songs => {
           this.songs = this.songs.concat(songs);
           console.log(this.songs);
@@ -123,24 +124,11 @@ export class SongsComponent implements OnInit {
   }
 
   onPrint() {
-    this.get('http://setlisthelper.com/api/Song6')
+    /*this.get('http://setlisthelper.com/api/Song6')
       .subscribe(function(result) {
 
       },
-      error => {console.log(error); });
-  }
-
-  createAuthorizationHeader(headers: HttpHeaders) {
-    headers.append('Authorization', 'Basic ' +
-      btoa('sydneyburnham:simongibby'));
-  }
-
-  get(url) {
-    const headers = new HttpHeaders();
-    this.createAuthorizationHeader(headers);
-    return this.http.get<Song>(url, {
-      headers: headers
-    });
+      error => {console.log(error); });*/
   }
 
   onRowClick(song) {
@@ -148,7 +136,32 @@ export class SongsComponent implements OnInit {
   }
 
   onEdit(song) {
+    this.songForEdit = song;
     this.songEdit.open(song);
+  }
+
+  onSongEditClose(updatedSong) {
+    if (this.songForEdit['ArtistId'] && this.songForEdit['ArtistId'] === -1) {
+      this.songForEdit.Artist = {
+        Name: updatedSong.ArtistName
+      };
+    } else if (this.songForEdit['Artist']) {
+      this.songForEdit.Artist['Name'] = updatedSong.ArtistName;
+    }
+
+    if (this.songForEdit['GenreId'] && this.songForEdit['GenreId'] === -1) {
+      this.songForEdit.Genre = {
+        Name: updatedSong.GenreName
+      };
+    } else if (this.songForEdit['Genre']) {
+      this.songForEdit.Genre['Name'] = updatedSong.GenreName;
+    }
+
+    Object.keys(updatedSong).map(((songAttribute, idx) => {
+      if (songAttribute !== 'Artist' && songAttribute !== 'Genre') {
+        this.songForEdit[songAttribute] = updatedSong[songAttribute];
+      }
+    }), this);
   }
 
 

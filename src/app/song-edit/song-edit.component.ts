@@ -1,4 +1,4 @@
-import {Component, OnInit, Inject, ViewChild} from '@angular/core';
+import {Component, OnInit, Inject, ViewChild, Output, EventEmitter} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {Song} from '../shared/model/song';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
@@ -14,6 +14,7 @@ import {SongService} from '../shared/services/song.service';
 
 
 export class SongEditComponent implements OnInit {
+  @Output() onClose = new EventEmitter();
   @ViewChild('songEditModal')
   modal: BsModalComponent;
 
@@ -32,14 +33,14 @@ export class SongEditComponent implements OnInit {
   ngOnInit() {
     this.isNew = false;
     this.accountId = 'someguid';
-    const songLength = 180;
-    const songLengthMinSec = Song.getSongLengthMinSec(songLength);
+    const SongLength = 180;
+    const songLengthMinSec = Song.getSongLengthMinSec(SongLength);
     this.song = new Song('',
       '',
       '',
       '',
       'A',
-      songLength,
+      SongLength,
       120,
       false,
       false,
@@ -57,27 +58,29 @@ export class SongEditComponent implements OnInit {
       '',
       '',
       songLengthMinSec.minutes,
-      songLengthMinSec.seconds
+      songLengthMinSec.seconds,
+      {},
+      {}
       );
     // this.artists = this.af.database.list('/artists');
 
     this.myForm = this.fb.group({
-      name: ['', [<any>Validators.required, <any>Validators.minLength(1)]],
-      artistName: ['', [<any>Validators.required, <any>Validators.minLength(1), <any>Validators.maxLength(255)]],
-      genreName: ['', [<any>Validators.minLength(1), <any>Validators.maxLength(255)]],
-      key: ['', [<any>Validators.maxLength(5), <any>Validators.minLength(1)]],
-      lengthMin: ['', []],
-      lengthSec: ['', []],
-      lyrics: ['', []],
-      tempo: ['', []],
-      notes: ['', [<any>Validators.minLength(1)]],
-      other: ['', [<any>Validators.minLength(1)]],
-      songLocation: ['', []],
-      createdByUserId: ['', []],
-      blob: ['', []],
-      documentLocation: ['', []],
-      songId: ['', []],
-      songType: ['', []]
+      Name: ['', [<any>Validators.required, <any>Validators.minLength(1)]],
+      ArtistName: ['', [<any>Validators.maxLength(255)]],
+      GenreName: ['', [<any>Validators.minLength(1), <any>Validators.maxLength(255)]],
+      Key: ['', [<any>Validators.maxLength(5), <any>Validators.minLength(1)]],
+      LengthMin: ['', []],
+      LengthSec: ['', []],
+      Lyrics: ['', []],
+      Tempo: ['', []],
+      Notes: ['', [<any>Validators.minLength(1)]],
+      Other: ['', [<any>Validators.minLength(1)]],
+      SongLocation: ['', []],
+      CreatedByUserId: ['', []],
+      Blob: ['', []],
+      DocumentLocation: ['', []],
+      SongId: ['', []],
+      SongType: ['', []]
     });
     this.sub = this.route.params.subscribe(params => {
       const id: string = params['songid'];
@@ -90,88 +93,91 @@ export class SongEditComponent implements OnInit {
 
     this.myForm.reset();
 
-    (<FormControl>this.myForm.controls['name'])
-      .setValue(song.name, {onlySelf: true});
+    (<FormControl>this.myForm.controls['Name'])
+      .setValue(song.Name, {onlySelf: true});
 
-    (<FormControl>this.myForm.controls['artistName'])
-      .setValue(song.artistName && song.artistName ? song.artistName : '', {onlySelf: true});
+    (<FormControl>this.myForm.controls['ArtistName'])
+      .setValue(song.ArtistName && song.ArtistName ? song.ArtistName : '', {onlySelf: true});
 
-    (<FormControl>this.myForm.controls['genreName'])
-      .setValue(song.genreName && song.genreName ? song.genreName : '', {onlySelf: true});
+    (<FormControl>this.myForm.controls['GenreName'])
+      .setValue(song.GenreName && song.GenreName ? song.GenreName : '', {onlySelf: true});
 
-    (<FormControl>this.myForm.controls['key'])
-      .setValue(song.key ? song.key : '' , {onlySelf: true});
+    (<FormControl>this.myForm.controls['Key'])
+      .setValue(song.Key ? song.Key : '' , {onlySelf: true});
 
-    if (song.songLength) {
-      const lengthMin = Math.floor(song.songLength / 60);
-      const lengthSec = song.songLength % 60;
-      (<FormControl>this.myForm.controls['lengthMin'])
+    if (song.SongLength) {
+      const lengthMin = Math.floor(song.SongLength / 60);
+      const lengthSec = song.SongLength % 60;
+      (<FormControl>this.myForm.controls['LengthMin'])
         .setValue(lengthMin, {onlySelf: true});
 
-      (<FormControl>this.myForm.controls['lengthSec'])
+      (<FormControl>this.myForm.controls['LengthSec'])
         .setValue(lengthSec, {onlySelf: true});
     } else {
-      (<FormControl>this.myForm.controls['lengthMin'])
+      (<FormControl>this.myForm.controls['LengthMin'])
         .setValue(3, {onlySelf: true});
 
-      (<FormControl>this.myForm.controls['lengthSec'])
+      (<FormControl>this.myForm.controls['LengthSec'])
         .setValue(0, {onlySelf: true});
     }
 
-    (<FormControl>this.myForm.controls['tempo'])
-      .setValue(song.tempo ? song.tempo : 120 , {onlySelf: true});
+    (<FormControl>this.myForm.controls['Tempo'])
+      .setValue(song.Tempo ? song.Tempo : 120 , {onlySelf: true});
 
-    (<FormControl>this.myForm.controls['lyrics'])
-      .setValue(song.lyrics ? song.lyrics : '', {onlySelf: true});
+    (<FormControl>this.myForm.controls['Lyrics'])
+      .setValue(song.Lyrics ? song.Lyrics : '', {onlySelf: true});
 
-    (<FormControl>this.myForm.controls['notes'])
-      .setValue(song.notes ? song.notes : '', {onlySelf: true});
+    (<FormControl>this.myForm.controls['Notes'])
+      .setValue(song.Notes ? song.Notes : '', {onlySelf: true});
 
-    (<FormControl>this.myForm.controls['other'])
-      .setValue(song.other ? song.other : '', {onlySelf: true});
+    (<FormControl>this.myForm.controls['Other'])
+      .setValue(song.Other ? song.Other : '', {onlySelf: true});
 
 
 
-    (<FormControl>this.myForm.controls['songLocation'])
+    (<FormControl>this.myForm.controls['SongLocation'])
       .setValue(song.SongLocation ? song.SongLocation : '', {onlySelf: true});
 
-    (<FormControl>this.myForm.controls['createdByUserId'])
+    (<FormControl>this.myForm.controls['CreatedByUserId'])
       .setValue(song.CreatedByUserId ? song.CreatedByUserId : '', {onlySelf: true});
 
-    (<FormControl>this.myForm.controls['blob'])
-      .setValue(song.Blob ? song.Blob : '', {onlySelf: true});
+    (<FormControl>this.myForm.controls['Blob'])
+      .setValue(song.Blob !== null ? song.Blob : '', {onlySelf: true});
 
-    (<FormControl>this.myForm.controls['documentLocation'])
-      .setValue(song.other ? song.other : '', {onlySelf: true});
+    (<FormControl>this.myForm.controls['DocumentLocation'])
+      .setValue(song.DocumentLocation ? song.DocumentLocation : '', {onlySelf: true});
 
-    (<FormControl>this.myForm.controls['songId'])
-      .setValue(song.songId ? song.songId : '', {onlySelf: true});
+    (<FormControl>this.myForm.controls['SongId'])
+      .setValue(song.SongId !== null ? song.SongId : '', {onlySelf: true});
 
-    (<FormControl>this.myForm.controls['songType'])
-      .setValue(song.songType === null ? song.songType : 0, {onlySelf: true});
+    (<FormControl>this.myForm.controls['SongType'])
+      .setValue(song.SongType !== null ? song.SongType : 0, {onlySelf: true});
 
-    this.isNew = !song.songId;
+    this.isNew = !song.SongId;
 
 
   }
 
   save(model, isValid: boolean) {
 
-    model.LengthMin = model.LengthMin * 60;
-    model.LengthMin += model.LengthMin;
+    model.SongLength = model.LengthMin * 60;
+    model.SongLength += model.LengthSec;
     delete model.LengthMin;
     delete model.LengthSec;
 
     if (this.isNew === true) {
       // model.createDate = new Date();
-      // this.songId = this.songService.createSong(model);
+      // this.SongId = this.songService.createSong(model);
     } else {
       // const songForUpdate: Song = Song.fromJson(model);
-      this.songService.updateSong(model.songId, model)
+      this.songService.updateSong(model.SongId, model)
         .do(updatedSong => console.log(`update song ${updatedSong}`))
-        .subscribe(updatedSong => {});
+        .subscribe(updatedSong => {
+          const returnSong: Song = Song.fromJson(updatedSong);
+          this.onClose.emit(returnSong);
+          this.modal.close();
+        });
     }
-    this.modal.close();
   }
 
   getOrCreateArtist(name: string) {
@@ -188,6 +194,7 @@ export class SongEditComponent implements OnInit {
   }
 
   close() {
+    this.onClose.emit();
     this.modal.close();
   }
 

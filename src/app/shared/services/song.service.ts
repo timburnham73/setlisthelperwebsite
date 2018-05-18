@@ -72,8 +72,8 @@ export class SongService {
   }
 
   updateSong(songId: string, song: Song) {
-    song.lastEdit = new Date().toISOString();
-    song.songId = songId;
+    song.LastEdit = new Date().toISOString();
+    song.SongId = songId;
     const songJson = Song.toJson(song);
     return this._http.put(this.actionUrl, songJson)
       .pipe(

@@ -11,38 +11,38 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">Name:</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control" formControlName="name" >
-                  <div class="field-error-message" *ngIf="isErrorVisible('name','required')">Name is required</div>
-                  <input type="hidden" formControlName="songLocation" value="">
-                  <input type="hidden" formControlName="createdByUserId" value="">
-                  <input type="hidden" formControlName="blob" value="">
-                  <input type="hidden" formControlName="documentLocation" value="">
-                  <input type="hidden" formControlName="songId" value="">
-                  <input type="hidden" formControlName="songType" value="">
+                  <input type="text" class="form-control" formControlName="Name" >
+                  <div class="field-error-message" *ngIf="isErrorVisible('Name','required')">Name is required</div>
+                  <input type="hidden" formControlName="SongLocation" value="">
+                  <input type="hidden" formControlName="CreatedByUserId" value="">
+                  <input type="hidden" formControlName="Blob" value="">
+                  <input type="hidden" formControlName="DocumentLocation" value="">
+                  <input type="hidden" formControlName="SongId" value="">
+                  <input type="hidden" formControlName="SongType" value="">
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label" >Artist:</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control" formControlName="artistName" value="">
+                  <input type="text" class="form-control" formControlName="ArtistName" value="">
                 </div>
               </div>
               <div class="form-group"><label class="col-sm-2 control-label" >Key:</label>
-                <div class="col-sm-10"><input type="text" class="form-control" formControlName="key" value=""></div>
+                <div class="col-sm-10"><input type="text" class="form-control" formControlName="Key" value=""></div>
               </div>
               <div class="form-group"><label class="col-sm-2 control-label" >Genre:</label>
-                <div class="col-sm-10"><input type="text" class="form-control" formControlName="genreName" value=""></div>
+                <div class="col-sm-10"><input type="text" class="form-control" formControlName="GenreName" value=""></div>
               </div>
               <div class="form-group"><label class="col-sm-2 control-label" >Length:</label>
                 <div class="col-sm-10 song-length flex">
-                  <input type="number" class="form-control flex-twenty song-length-min" formControlName="lengthMin" value="">
+                  <input type="number" class="form-control flex-twenty song-length-min" formControlName="LengthMin" value="">
                   <span class="song-length-colon flex-five"> : </span>
-                  <input type="number" class="form-control flex-twenty song-length-sec" formControlName="lengthSec" value="">
+                  <input type="number" class="form-control flex-twenty song-length-sec" formControlName="LengthSec" value="">
                 </div>
               </div>
               <div class="form-group"><label class="col-sm-2 control-label" >Tempo:</label>
                 <div class="col-sm-10">
-                  <input type="number" class="form-control song-tempo" formControlName="tempo" value="">
+                  <input type="number" class="form-control song-tempo" formControlName="Tempo" value="">
                 </div>
               </div>
               <div class="form-group"><label class="col-sm-2 control-label" >Lyrics:</label>
@@ -50,7 +50,7 @@
                     <textarea class="form-control"
                               rows="20"
                               id="Lyrics"
-                              formControlName="lyrics"
+                              formControlName="Lyrics"
                     ></textarea>
                 </div>
               </div>
@@ -59,7 +59,7 @@
                     <textarea class="form-control"
                               rows="5"
                               id="notes"
-                              formControlName="notes"
+                              formControlName="Notes"
                     ></textarea>
                 </div>
               </div>
@@ -68,7 +68,7 @@
                     <textarea class="form-control"
                               rows="5"
                               id="other"
-                              formControlName="other"
+                              formControlName="Other"
                     ></textarea>
                 </div>
               </div>
