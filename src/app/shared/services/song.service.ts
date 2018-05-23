@@ -71,11 +71,22 @@ export class SongService {
       );
   }
 
-  updateSong(songId: string, song: Song) {
+  updateSong(songId: number, song: Song) {
     song.LastEdit = new Date().toISOString();
     song.SongId = songId;
     const songJson = Song.toJson(song);
     return this._http.put(this.actionUrl, songJson)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
+  // Returns the song key
+  createSong(song: Song): Observable<any> {
+    song.LastEdit = new Date().toISOString();
+    song.SongId = -1;
+    const songJson = Song.toJson(song);
+    return this._http.post(this.actionUrl, songJson)
       .pipe(
         catchError(this.handleError)
       );
@@ -94,14 +105,6 @@ export class SongService {
             return song;
           });
       });
-  }
-
-  //Returns the song key
-  createSong(song: Song): string {
-    const SongKey = this.db.list('songs').push(song).key;
-    this.artistService.createArtistIfItDoesNotExist(SongKey, song.accountId, song.ArtistName);
-    this.genreService.createGenreIfItDoesNotExist(SongKey, song.accountId, song.GenreName);
-    return SongKey;
   }
 
   //Returns the song key

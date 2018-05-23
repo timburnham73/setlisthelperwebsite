@@ -1,7 +1,7 @@
 
 export class Song {
   constructor(
-    public SongId: string,
+    public SongId: number,
     public Name: string,
     public ArtistName: string,
     public GenreName: string,
@@ -31,6 +31,14 @@ export class Song {
   }
 
 
+  static createNewSong(): Song{
+    const newDate = new Date().toISOString();
+    const newSong: Song = new Song(-1, '', '',
+      '', 'A', 240, 120, false, false, '', '', newDate, 0,
+      '', 4, 4, 4, '', '',
+      '', '', '', 3, 30, {}, {});
+    return newSong;
+  }
   static fromJsonArray(array): Song[] {
     return array.map(json => Song.fromJson(json));
 
@@ -128,8 +136,8 @@ export class Song {
       DocumentLocation,
       songLengthMinSec.minutes,
       songLengthMinSec.seconds,
-      {},
-      {}
+      Artist,
+      Genre
     );
   }
 }

@@ -141,36 +141,44 @@ export class SongsComponent implements OnInit {
   }
 
   onSongEditClose(updatedSong) {
-    if (this.songForEdit['ArtistId'] && this.songForEdit['ArtistId'] === -1) {
-      this.songForEdit.Artist = {
-        Name: updatedSong.ArtistName
-      };
-    } else if (this.songForEdit['Artist']) {
-      this.songForEdit.Artist['Name'] = updatedSong.ArtistName;
-    }
-
-    if (this.songForEdit['GenreId'] && this.songForEdit['GenreId'] === -1) {
-      this.songForEdit.Genre = {
-        Name: updatedSong.GenreName
-      };
-    } else if (this.songForEdit['Genre']) {
-      this.songForEdit.Genre['Name'] = updatedSong.GenreName;
-    }
-
-    Object.keys(updatedSong).map(((songAttribute, idx) => {
-      if (songAttribute !== 'Artist' && songAttribute !== 'Genre') {
-        this.songForEdit[songAttribute] = updatedSong[songAttribute];
+    if (this.songForEdit != null) {
+      if (this.songForEdit['ArtistId'] && this.songForEdit['ArtistId'] === -1) {
+        this.songForEdit.Artist = {
+          Name: updatedSong.ArtistName
+        };
+      } else if (this.songForEdit['Artist']) {
+        this.songForEdit.Artist['Name'] = updatedSong.ArtistName;
       }
-    }), this);
+
+      if (this.songForEdit['GenreId'] && this.songForEdit['GenreId'] === -1) {
+        this.songForEdit.Genre = {
+          Name: updatedSong.GenreName
+        };
+      } else if (this.songForEdit['Genre']) {
+        this.songForEdit.Genre['Name'] = updatedSong.GenreName;
+      }
+
+      Object.keys(updatedSong).map(((songAttribute, idx) => {
+          this.songForEdit[songAttribute] = updatedSong[songAttribute];
+      }), this);
+    } else {
+      // Adding a new song
+      const newSong: Song = Song.createNewSong();
+      Object.keys(updatedSong).map(((songAttribute, idx) => {
+        newSong[songAttribute] = updatedSong[songAttribute];
+      }), this);
+      this.songs.unshift(newSong);
+    }
   }
 
 
   addNew() {
-    /*if (this.tagId) {
-      this.songCatalogSelctor.open(this.tagId);
+    if (this.tagId) {
+      // this.songCatalogSelctor.open(this.tagId);
     } else {
-      this.songEdit.open(new Song(null, this.accountId, '', '', '', 'A', 180, 120, false, '', ''));
-    }*/
+      this.songForEdit = null;
+      this.songEdit.open(Song.createNewSong());
+    }
   }
 
   deleteItem(song: Song) {

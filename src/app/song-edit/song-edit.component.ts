@@ -2,7 +2,7 @@ import {Component, OnInit, Inject, ViewChild, Output, EventEmitter} from '@angul
 import {Router, ActivatedRoute} from '@angular/router';
 import {Song} from '../shared/model/song';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
-import { BsModalComponent, BsModalService } from 'ng2-bs3-modal/ng2-bs3-modal';
+import { BsModalComponent } from 'ng2-bs3-modal/ng2-bs3-modal';
 import {SongService} from '../shared/services/song.service';
 
 @Component({
@@ -14,7 +14,7 @@ import {SongService} from '../shared/services/song.service';
 
 
 export class SongEditComponent implements OnInit {
-  @Output() onClose = new EventEmitter();
+  @Output() closeModal = new EventEmitter();
   @ViewChild('songEditModal')
   modal: BsModalComponent;
 
@@ -35,34 +35,7 @@ export class SongEditComponent implements OnInit {
     this.accountId = 'someguid';
     const SongLength = 180;
     const songLengthMinSec = Song.getSongLengthMinSec(SongLength);
-    this.song = new Song('',
-      '',
-      '',
-      '',
-      'A',
-      SongLength,
-      120,
-      false,
-      false,
-      '',
-      '',
-      new Date().toISOString(),
-      0,
-      '',
-      4,
-      4,
-      0,
-      '',
-      '',
-      '',
-      '',
-      '',
-      songLengthMinSec.minutes,
-      songLengthMinSec.seconds,
-      {},
-      {}
-      );
-    // this.artists = this.af.database.list('/artists');
+    this.song = Song.createNewSong();
 
     this.myForm = this.fb.group({
       Name: ['', [<any>Validators.required, <any>Validators.minLength(1)]],
@@ -166,15 +139,20 @@ export class SongEditComponent implements OnInit {
     delete model.LengthSec;
 
     if (this.isNew === true) {
-      // model.createDate = new Date();
-      // this.SongId = this.songService.createSong(model);
+      model.createDate = new Date();
+      this.songService.createSong(model).do(updatedSong => console.log(`update song ${updatedSong}`))
+        .subscribe(updatedSong => {
+          const returnSong: Song = Song.fromJson(updatedSong.song);
+          this.closeModal.emit(returnSong);
+          this.modal.close();
+        });
     } else {
       // const songForUpdate: Song = Song.fromJson(model);
       this.songService.updateSong(model.SongId, model)
         .do(updatedSong => console.log(`update song ${updatedSong}`))
         .subscribe(updatedSong => {
           const returnSong: Song = Song.fromJson(updatedSong);
-          this.onClose.emit(returnSong);
+          this.closeModal.emit(returnSong);
           this.modal.close();
         });
     }
@@ -194,17 +172,20 @@ export class SongEditComponent implements OnInit {
   }
 
   close() {
-    this.onClose.emit();
+    this.closeModal.emit();
     this.modal.close();
   }
 
   open(song) {
-
-    this.songService.getSong(String(song.SongId))
-      .subscribe(songFromService => {
-        this.song = Song.fromJson(songFromService);
-        this.loadSong(this.song);
-      });
+    if (song.SongId !== -1) {
+      this.songService.getSong(String(song.SongId))
+        .subscribe(songFromService => {
+          this.song = Song.fromJson(songFromService);
+          this.loadSong(this.song);
+        });
+    } else {
+      this.loadSong(this.song);
+    }
     this.modal.open('sm');
   }
 
