@@ -1,0 +1,89 @@
+<div class="printSection" [innerHTML]="parsedSong | safe"></div>
+<bs-modal #songLyricsModal class="song-lyrics-modal">
+  <bs-modal-header [showDismiss]="true">
+    <h4 class="modal-title">Song Edit</h4>
+  </bs-modal-header>
+  <bs-modal-body>
+    <div>
+      <div class="mail-text">
+        <div class="note-editor note-frame" *ngIf="isEditing">
+                <textarea
+                  class="lyric-edit-text form-control"
+                  placeholder="Type lyrics here"
+                  rows="20"
+                  [(ngModel)]="lyricsForEdit"
+                ></textarea>
+        </div>
+        <div class="note-editor note-frame" *ngIf="!isEditing">
+          <div class="note-toolbar panel-heading">
+            <div class="note-btn-group btn-group note-style">
+              <div class="note-btn-group btn-group">
+                <dropdown [values]="dropdownValues" [selectedValue]="selectedSongPart" (select)="selectSongPart($event)"></dropdown>
+
+              </div>
+            </div>
+            <div class="note-btn-group btn-group note-font">
+              <button type="button" class="note-btn btn btn-default btn-sm"
+                      [ngClass]="{'active': displaySettings[selectedDisplaySettingValue].fontWeight === 'bold', '': displaySettings[selectedDisplaySettingValue].fontWeight === 'normal'}" tabindex="-1" title=""
+                      data-original-title="Bold (⌘+B)" (click)="onStyleChange('fontWeight',null)">
+                <i class="fa fa-bold icon-bold"></i>
+              </button>
+              <button type="button" class="note-btn btn btn-default btn-sm"
+                      [ngClass]="{'active': displaySettings[selectedDisplaySettingValue].fontStyle === 'italic'}"
+                      tabindex="-1"
+                      title="" (click)="onStyleChange('fontStyle',null)">
+                <i class="fa fa-italic icon-italic"></i></button>
+              <button type="button" class="note-btn btn btn-default btn-sm"
+                      [ngClass]="{'active': displaySettings[selectedDisplaySettingValue].textDecoration === 'underline'}" tabindex="-1" title=""
+                      (click)="onStyleChange('textDecoration',null)">
+                <i class="fa fa-underline icon-underline"></i>
+              </button>
+            </div>
+            <div class="note-btn-group btn-group note-style">
+              <div class="note-btn-group btn-group">
+                <dropdown [values]="fontValues" [(selectedValue)]="displaySettings[selectedDisplaySettingValue].fontName" (select)="selectFontValue($event)"></dropdown>
+              </div>
+            </div>
+            <div class="note-btn-group btn-group note-style">
+              <div class="note-btn-group btn-group">
+                <dropdown [values]="fontSizeValues" [(selectedValue)]="displaySettings[selectedDisplaySettingValue].fontSize" (select)="selectFontSize($event)"></dropdown>
+              </div>
+            </div>
+            <div class="note-btn-group btn-group note-style">
+              <div class="note-btn-group btn-group">
+                <fontcolordropdown [(selectedBackgroundColorValue)]="displaySettings[selectedDisplaySettingValue].fontBackgroundColor"
+                                   [(selectedFontColorValue)]="displaySettings[selectedDisplaySettingValue].fontColor"
+                                   (selectFontColor)="selectFontColor($event)"
+                                   (selectFontBackgroundColor)="selectFontBackgroundColor($event)">
+                </fontcolordropdown>
+              </div>
+            </div>
+          </div>
+          <div *ngIf="lyricStyle" [innerHtml]="lyricStyle | safe"></div>
+          <div class="mail-body">
+
+            <div class="row">
+              <div class="col-sm-12">
+                <div [innerHTML]="parsedSong | safe"></div>
+              </div>
+              <div class="col-sm-12" *ngIf="selectedSongLyric?.lyrics === ''">
+                No Lyrics
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="clearfix"></div>
+      </div>
+
+    </div>
+
+  </bs-modal-body>
+  <bs-modal-footer>
+    <button type="button" class="btn btn-default" data-dismiss="modal" (click)="modal.dismiss()">Cancel</button>
+    <button class="btn btn-primary"
+
+            >Save</button>
+
+  </bs-modal-footer>
+</bs-modal>

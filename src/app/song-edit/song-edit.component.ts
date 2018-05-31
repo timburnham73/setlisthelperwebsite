@@ -178,7 +178,7 @@ export class SongEditComponent implements OnInit {
 
   open(song) {
     if (song.SongId !== -1) {
-      this.songService.getSong(String(song.SongId))
+      this.songService.getSong(song.SongId)
         .subscribe(songFromService => {
           this.song = Song.fromJson(songFromService);
           this.loadSong(this.song);

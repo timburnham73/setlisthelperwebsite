@@ -64,7 +64,7 @@ export class SongService {
 
   }*/
 
-  getSong(songId: string): Observable<any> {
+  getSong(songId: number): Observable<any> {
     return this._http.get(this.actionUrl + `?id=${songId}`)
       .pipe(
         catchError(this.handleError)

@@ -10,6 +10,7 @@ import {SongService} from '../shared/services/song.service';
 import {AuthService} from '../shared/security/auth.service';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {SongEditComponent} from '../song-edit';
+import {SongLyricComponent} from '../song-lyric';
 
 
 
@@ -22,6 +23,7 @@ import {SongEditComponent} from '../song-edit';
 })
 export class SongsComponent implements OnInit {
   @ViewChild('songEdit') songEdit: SongEditComponent;
+  @ViewChild('songLyric') songLyric: SongLyricComponent;
   // @ViewChild('songLyric') songLyric: SongLyricComponent;
   // @ViewChild('songCatalogSelector') songCatalogSelctor:SongCatalogSelectorComponent;
 
@@ -72,20 +74,11 @@ export class SongsComponent implements OnInit {
       this.genreId = params['genreId'];
       this.tagId = params['tagId'];
       this.songCount = 0;
-      // `this.accountService.getAccount(this.accountId).subscribe(account => this.account = account);
-      /*if (this.artistId) {
-        this.artistService.getArtist(this.artistId.toLowerCase())
-7          .subscribe(ArtistName => this.ArtistName = ArtistName);
-      }*/
-      /*if (this.genreId) {
-        this.genreService.getGenre(this.genreId.toLowerCase())
-          .subscribe(GenreName => this.GenreName = GenreName);
-      }*/
       if (this.tagId) {
 
       }
       this.songService.getSongCount()
-        .do(x => console.log(`Song count total ${x}`))
+        // .do(x => console.log(`Song count total ${x}`))
         .subscribe(count => {
           this.songCount = Number(count);
         });
@@ -95,27 +88,17 @@ export class SongsComponent implements OnInit {
   }
 
   onSearch(termToSearch) {
-    /*if (this.artistId) {
-      this.artistService.getSongsForArtist(this.artistId.toLowerCase())
-        .subscribe(songs => this.songs = songs);
-    } else if (this.genreId) {
-      this.genreService.getSongsForGenre(this.genreId.toLowerCase())
-        .subscribe(songs => this.songs = songs);
-    } else if (this.tagId) {
-      this.tagService.getSongs(this.tagId)
-        .subscribe(songs => this.songs = songs);
-    } else {*/
-      this.songService.findAllSongs(this.startingIndex, this.pageSize)
-        .map((songs) => {
-          return songs.filter(song => ((termToSearch === '')
-            || (termToSearch && song.Name.toLowerCase().includes(termToSearch.toLowerCase()))));
-        })
-        // .do(songs => console.log(`Song count ${this.songs.length + songs.length}`))
-        .subscribe(songs => {
-          this.songs = this.songs.concat(songs);
-          console.log(this.songs);
-        });
-    // }
+
+    this.songService.findAllSongs(this.startingIndex, this.pageSize)
+      .map((songs) => {
+        return songs.filter(song => ((termToSearch === '')
+          || (termToSearch && song.Name.toLowerCase().includes(termToSearch.toLowerCase()))));
+      })
+      .subscribe(songs => {
+        this.songs = this.songs.concat(songs);
+        console.log(this.songs);
+      });
+
   }
 
   onScroll() {
@@ -132,7 +115,8 @@ export class SongsComponent implements OnInit {
   }
 
   onRowClick(song) {
-    // this.songLyric.open(song);
+    this.songForEdit = song;
+    this.songLyric.open(song);
   }
 
   onEdit(song) {
@@ -169,6 +153,30 @@ export class SongsComponent implements OnInit {
       }), this);
       this.songs.unshift(newSong);
     }
+  }
+
+  onSongLyricClose(updatedSong) {
+    /*if (this.songForEdit != null) {
+      if (this.songForEdit['ArtistId'] && this.songForEdit['ArtistId'] === -1) {
+        this.songForEdit.Artist = {
+          Name: updatedSong.ArtistName
+        };
+      } else if (this.songForEdit['Artist']) {
+        this.songForEdit.Artist['Name'] = updatedSong.ArtistName;
+      }
+
+      if (this.songForEdit['GenreId'] && this.songForEdit['GenreId'] === -1) {
+        this.songForEdit.Genre = {
+          Name: updatedSong.GenreName
+        };
+      } else if (this.songForEdit['Genre']) {
+        this.songForEdit.Genre['Name'] = updatedSong.GenreName;
+      }
+
+      Object.keys(updatedSong).map(((songAttribute, idx) => {
+        this.songForEdit[songAttribute] = updatedSong[songAttribute];
+      }), this);
+    }*/
   }
 
 
