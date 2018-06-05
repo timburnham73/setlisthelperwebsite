@@ -23,7 +23,7 @@ export class ChordProParser {
     const lyricsSplit = this.chordProString.split('\n');
     let parsedSong = '';
 
-    if (lyricsSplit.length === 0) {
+    if (!this.chordProString) {
       parsedSong += '<div><span>No Lyrics</span></div>';
       parsedSong += '</div>'; // Add div to match lyrics div
       return parsedSong;
@@ -32,7 +32,7 @@ export class ChordProParser {
     let songKey = '';
     let songTempo = '';
 
-    for (const index in lyricsSplit) {
+    for (const index of Object.keys(lyricsSplit)) {
       let lyricLine = lyricsSplit[index];
 
 

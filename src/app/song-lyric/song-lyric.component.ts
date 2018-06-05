@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output, Pipe, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output, Pipe, ViewChild} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 
 import {ChordProParser} from './ChordProParser';
@@ -8,6 +8,7 @@ import {SongService} from '../shared/services/song.service';
 import {BsModalComponent} from 'ng2-bs3-modal';
 import {DomSanitizer} from '@angular/platform-browser';
 import {LyricDisplaySetting} from './LyricDisplaySetting';
+import {DropDownValues, FontSizeValues, FontValues} from './lyricViewConstants';
 declare var _: any;
 declare var jQuery: any;
 
@@ -28,12 +29,15 @@ export class Safe {
   styleUrls: ['song-lyric.component.less']
 })
 export class SongLyricComponent implements OnInit {
+  @Input() songList: Song[];
   @Output() closeModal = new EventEmitter();
   @ViewChild('songLyricsModal')
+
   modal: BsModalComponent;
 
   public song: Song;
   public parsedSong: string;
+  public lyricsForEdit: string;
   public lyricStyle: string;
   public displaySettings: any;
   public defaultDisplaySettings: any;
@@ -45,6 +49,8 @@ export class SongLyricComponent implements OnInit {
   public selectedSongPart: string;
   public selectedDisplaySettingValue: string;
   public isEditing = false;
+  private isLoading = false;
+  private isSaving = false;
 
   constructor(private route: ActivatedRoute,
               private fb: FormBuilder,
@@ -58,85 +64,15 @@ export class SongLyricComponent implements OnInit {
       tab: new LyricDisplaySetting('tab', 'block', 'small', 'bold', 'normal', '', '', '', 'Monospace' ),
     };
 
+    this.parsedSong = '';
     this.displaySettings = _.clone(this.defaultDisplaySettings, true);
 
 
-    this.fontValues = [
-      {
-        value: 'Arial',
-        name: 'Arial'
-      },
-      {
-        value: 'monospace',
-        name: 'Monospace'
-      },
-      {
-        value: 'Lucida Console',
-        name: 'Lucida Console'
-      },
-      {
-        value: 'Verdana',
-        name: 'Verdana'
-      },
-      {
-        value: 'Sans Serif',
-        name: 'Sans Serif'
-      }
-    ];
+    this.fontValues = FontValues;
 
-    this.fontSizeValues = [
-      {
-        value: 'xx-small',
-        name: 'xx-small'
-      },
-      {
-        value: 'x-small',
-        name: 'x-small'
-      },
-      {
-        value: 'small',
-        name: 'small'
-      },
-      {
-        value: 'medium',
-        name: 'medium'
-      },
-      {
-        value: 'large',
-        name: 'large'
-      },
-      {
-        value: 'x-large',
-        name: 'x-large'
-      },
-      {
-        value: 'xx-large',
-        name: 'xx-large'
-      }
-    ];
+    this.fontSizeValues = FontSizeValues;
 
-    this.dropdownValues = [
-      {
-        value: 'lyricText',
-        name: 'Lyrics'
-      },
-      {
-        value: 'lyricsHeader',
-        name: 'Title'
-      },
-      {
-        value: 'chord',
-        name: 'Chords'
-      },
-      {
-        value: 'songPart',
-        name: 'Song Header'
-      },
-      {
-        value: 'tab',
-        name: 'Tablature'
-      }
-    ];
+    this.dropdownValues = DropDownValues;
 
     this.selectedDisplaySettingValue = 'lyricText';
 
@@ -156,25 +92,44 @@ export class SongLyricComponent implements OnInit {
     this.modal.close();
   }
 
-  save() {
+  save(closeModal: boolean) {
+    this.isSaving = true;
+    this.song.Lyrics = this.lyricsForEdit;
+    this.songService.updateSong(this.song.SongId, this.song)
+      .subscribe(updatedSong => {
+        this.isSaving = false;
+        if (closeModal) {
+          this.modal.dismiss();
+        } else {
+          this.isEditing = false;
+          const parser =  new ChordProParser(this.lyricsForEdit);
+          this.parsedSong = parser.parseChordPro();
+        }
+      });
+  }
 
+  edit() {
+    this.isEditing = true;
   }
 
   open(song) {
+    this.isEditing = false;
+    this.loadSong(song);
+    this.modal.open('lg');
+  }
+
+  loadSong(song) {
     if (song.SongId !== -1) {
+      this.isLoading = true;
       this.songService.getSong(song.SongId)
         .subscribe(songFromService => {
           this.song = Song.fromJson(songFromService);
-          if (_.size(this.song.Lyrics) > 0) {
-
-            const parser =  new ChordProParser(this.song.Lyrics);
-            this.parsedSong = parser.parseChordPro();
-          }
+          this.lyricsForEdit = this.song.Lyrics;
+          const parser =  new ChordProParser(this.song.Lyrics);
+          this.parsedSong = parser.parseChordPro();
+          this.isLoading = false;
         });
-    } else {
-      // this.loadLyrics(this.song);
     }
-    this.modal.open('lg');
   }
 
   onStyleChange(styleType, value) {
@@ -223,11 +178,11 @@ export class SongLyricComponent implements OnInit {
     this.selectedDisplaySettingValue = value.value;
   }
 
-  selectFontValue(fontValue){
+  selectFontValue(fontValue) {
     this.onStyleChange('fontName', fontValue.value);
   }
 
-  selectFontSize(fontSize){
+  selectFontSize(fontSize) {
     this.onStyleChange('fontSize', fontSize.value);
   }
 
@@ -237,5 +192,26 @@ export class SongLyricComponent implements OnInit {
   selectFontBackgroundColor(fontBackgroundColor) {
 
     this.onStyleChange('fontBackgroundColor', fontBackgroundColor);
+  }
+
+  onPreviousSong() {
+    if (this.songList !== null) {
+      const indexOfSong = this.songList.findIndex(song => this.song.SongId === song.SongId);
+      const previousIndex = indexOfSong - 1;
+      if (previousIndex >= 0 ) {
+        const previousSong = this.songList[previousIndex];
+        this.loadSong(previousSong);
+      }
+    }
+  }
+  onNextSong() {
+    if (this.songList !== null) {
+      const indexOfSong = this.songList.findIndex(song => this.song.SongId === song.SongId);
+      const nextIndex = indexOfSong + 1;
+      if (nextIndex <= this.songList.length ) {
+        const previousSong = this.songList[nextIndex];
+        this.loadSong(previousSong);
+      }
+    }
   }
 }

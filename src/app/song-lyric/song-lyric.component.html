@@ -1,25 +1,29 @@
 <div class="printSection" [innerHTML]="parsedSong | safe"></div>
 <bs-modal #songLyricsModal class="song-lyrics-modal">
   <bs-modal-header [showDismiss]="true">
-    <h4 class="modal-title">Song Edit</h4>
+    <div class="flex" *ngIf="!isLoading">
+      <div class="flex-ten" (click)="onPreviousSong()"><i class="fa fa-3x fa-angle-double-left pull-right song-navigate"></i></div>
+      <h2 class="song-title flex-1">{{song?.Name}}</h2>
+      <div class="flex-ten" (click)="onNextSong()"><i class="fa fa-3x fa-angle-double-right song-navigate"></i></div>
+    </div>
   </bs-modal-header>
   <bs-modal-body>
     <div>
       <div class="mail-text">
-        <div class="note-editor note-frame" *ngIf="isEditing">
+        <div class="note-editor note-frame" *ngIf="isEditing && !isLoading">
                 <textarea
                   class="lyric-edit-text form-control"
                   placeholder="Type lyrics here"
+                  [disabled]="isSaving"
                   rows="20"
                   [(ngModel)]="lyricsForEdit"
                 ></textarea>
         </div>
-        <div class="note-editor note-frame" *ngIf="!isEditing">
+        <div class="note-editor note-frame" *ngIf="!isEditing && !isLoading">
           <div class="note-toolbar panel-heading">
             <div class="note-btn-group btn-group note-style">
               <div class="note-btn-group btn-group">
                 <dropdown [values]="dropdownValues" [selectedValue]="selectedSongPart" (select)="selectSongPart($event)"></dropdown>
-
               </div>
             </div>
             <div class="note-btn-group btn-group note-font">
@@ -58,6 +62,7 @@
                 </fontcolordropdown>
               </div>
             </div>
+            <div class="pull-right"><button class="btn btn-primary" (click)="edit()"><i class="fa fa-pencil"></i> Edit</button></div>
           </div>
           <div *ngIf="lyricStyle" [innerHtml]="lyricStyle | safe"></div>
           <div class="mail-body">
@@ -72,6 +77,9 @@
             </div>
           </div>
         </div>
+        <div *ngIf="isLoading">
+          <h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"> </i> Loading...</h1>
+        </div>
 
         <div class="clearfix"></div>
       </div>
@@ -80,10 +88,10 @@
 
   </bs-modal-body>
   <bs-modal-footer>
-    <button type="button" class="btn btn-default" data-dismiss="modal" (click)="modal.dismiss()">Cancel</button>
-    <button class="btn btn-primary"
-
-            >Save</button>
+    <button *ngIf="!isEditing"  type="button" class="btn btn-primary" (click)="modal.dismiss()">Done</button>
+    <button *ngIf="isEditing" type="button" class="btn btn-default" [disabled]="isSaving" (click)="isEditing = false">Cancel</button>
+    <button *ngIf="isEditing" class="btn btn-primary" (click)="save(true)"><i *ngIf="isSaving" class="fa fa-spinner fa-spin"></i> Save and Close</button>
+    <button *ngIf="isEditing" class="btn btn-primary" (click)="save(false)"><i *ngIf="isSaving" class="fa fa-spinner fa-spin"></i> Save</button>
 
   </bs-modal-footer>
 </bs-modal>
