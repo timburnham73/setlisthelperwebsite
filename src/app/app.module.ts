@@ -26,6 +26,7 @@ import {SLHHttpClient} from './shared/web/HttpClient';
 import {Safe, SongLyricComponent} from './song-lyric';
 import {FontColorDropdownComponent} from './shared/font-color-dropdown';
 import {DropdownComponent} from './shared/dropDownList';
+import {SongImportComponent} from './song-import/song-import.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import {DropdownComponent} from './shared/dropDownList';
     Safe,
     DropdownComponent,
     FontColorDropdownComponent,
+    SongImportComponent,
 
   ],
   imports: [

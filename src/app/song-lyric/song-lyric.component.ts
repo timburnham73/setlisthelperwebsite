@@ -174,7 +174,6 @@ export class SongLyricComponent implements OnInit {
   }
 
   selectSongPart(value) {
-
     this.selectedDisplaySettingValue = value.value;
   }
 
@@ -190,7 +189,6 @@ export class SongLyricComponent implements OnInit {
     this.onStyleChange('fontColor', fontColor);
   }
   selectFontBackgroundColor(fontBackgroundColor) {
-
     this.onStyleChange('fontBackgroundColor', fontBackgroundColor);
   }
 
