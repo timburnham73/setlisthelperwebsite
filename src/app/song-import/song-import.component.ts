@@ -12,12 +12,13 @@ declare var _: any;
 })
 export class SongImportComponent implements OnInit {
   public stepNumber = 1;
-  public songsToImport: string;
+  public importSongsResult = '';
+  public songsToImport = '';
   public categories: any[] = [];
   public accountId: string;
   private delimiter: string;
   private songLines: string[];
-  private songFieldTypes: string[] = ['name', 'artist', 'genre', 'songKey', 'length', 'tempo', 'lyrics', 'notes', 'other'];
+  private songFieldTypes: string[] = ['Name', 'ArtistName', 'GenreName', 'SongKey', 'Length', 'Tempo', 'Notes', 'Other'];
 
   constructor(
     private route: ActivatedRoute,
@@ -59,13 +60,26 @@ export class SongImportComponent implements OnInit {
     }
   }
 
-  stepTwoFinish() {
+  stepTwoStartImport() {
+    this.stepNumber = 3;
+    this.importSongs();
+  }
+
+  stepThreeFinish() {
+    this.router.navigate(['songs' ]);
+  }
+
+  async importSongs() {
     for (let i = 0; i < this.songLines.length ; i++) {
 
-        const songItems = this.songLines[i].split(this.delimiter);
-        this.createSongFromLine(songItems);
+      const songItems = this.songLines[i].split(this.delimiter);
+
+      this.createSongFromLine(songItems)
+        .do(updatedSong => console.log(`update song ${updatedSong}`))
+        .subscribe(updatedSong => {
+          this.importSongsResult += `Finished creating ${updatedSong.song.Name}\r\n`;
+        });
     }
-    this.router.navigate(['accounts', this.accountId, 'songs' ]);
   }
 
   createSongFromLine(songLineArray) {
@@ -84,12 +98,12 @@ export class SongImportComponent implements OnInit {
         song[category.type] = songLineArray[index];
       }
     });
-
-    //this.songService.createSongIfItDoesNotExist(song);
+    this.importSongsResult += `Importing ${song.Name}\r\n`;
+    return this.songService.createSong(song).do(updatedSong => console.log(`update song ${updatedSong}`));
   }
 
-  populateCategories(songLines, delimiter){
-    if(songLines.length > 0) {
+  populateCategories(songLines, delimiter) {
+    if (songLines.length > 0) {
       //Collect 3 items to display
       for (let i = 0; i < (i === 3 || songLines.length) ; i++) {
         const songItems = songLines[i].split(delimiter);
