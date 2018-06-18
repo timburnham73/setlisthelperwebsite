@@ -1,0 +1,170 @@
+<top-menu></top-menu>
+<div id="setlist-songs-wrapper">
+  <div id="page-wrapper setlist-songs" class="gray-bg">
+    <div class="wrapper wrapper-content  animated fadeInRight">
+      <div class="row">
+        <div class="song-catalog" [ngClass]="{'col-lg-4': showSongs}" *ngIf="showSongs">
+          <div class="ibox">
+            <div class="ibox-title">
+              <h5>Song list</h5>
+              <div class="ibox-tools">
+                <a class="close-link" (click)="showSongs=false">
+                  <i class="fa fa-times"></i>
+                </a>
+              </div>
+            </div>
+            <div class="ibox-content">
+
+              <div class="m-b-sm">
+
+                <div class="input-group">
+                  <input type="text" placeholder="Search by song name..." class=" form-control">
+                  <span class="input-group-btn">
+                      <button type="button" class="btn btn-white"> Search</button>
+                  </span>
+                </div>
+              </div>
+
+              <div class="flex-hundred justify-start">
+                <div class="flex flex-row flex-hundred justify-start align-center flex-wrap table-header">
+                  <div class="flex-forty">Name</div>
+                  <div class="flex-thirty">Artist</div>
+                  <div class="flex-twenty">Key</div>
+                  <div class="flex-ten">&nbsp;</div>
+                </div>
+                <div class="table-content-wrapper" [dragula]='"first-bag"'>
+                  <div class="flex flex-row flex-hundred justify-start align-center flex-wrap song-catalog-row table-content"
+                       id="songs-catalog"
+                       *ngFor="let song of songs">
+                    <div class="flex-forty">
+                      {{song.name}}
+                    </div>
+                    <div class="flex-thirty">
+                      {{ song.artist}}
+                    </div>
+                    <div class="flex-twenty">
+                      {{ song.songKey}}
+                    </div>
+                    <div class="flex-ten">
+                      <span class="fa fa-plus"  (click)="addSongToSetlist(song)"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="setlist-songs" [ngClass]="{'col-lg-8': showSongs, 'col-lg-12': !showSongs}">
+
+          <div class="ibox">
+            <div class="ibox-title">
+              <ol class="breadcrumb">
+                <li>
+                  <a href="javascript:void(0)" [routerLink]="['/accounts']">{{account?.name}}</a>
+                </li>
+                <li>
+                  <a href="javascript:void(0)" [routerLink]="['/accounts',accountId,'setlists']">Setlists</a>
+                </li>
+                <li class="active">
+                  <strong>{{setlist?.name}} </strong>
+                </li>
+              </ol>
+            </div>
+            <div class="ibox-content">
+
+              <div class="m-b-sm">
+                <div class="m-t-md">
+
+                  <div >
+                    <button type="button" (click)="showSongs=true" class="btn btn-sm btn-white"> <i class="fa fa-plus"></i> </button>
+                    <button type="button" (click)="addBreak()" class="btn btn-sm btn-white"> <i class="fa fa-plus"></i> Add Break</button>
+                    <button type="button" (click)="callSLHService()" class="btn btn-sm btn-white"> <i class="fa fa-user"></i> </button>
+                    <strong class="pull-right">{{songCount}} songs, {{breakCount}} breaks</strong>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="flex-hundred justify-start">
+                <div class="flex flex-row flex-hundred justify-start align-center flex-wrap table-header">
+                  <div class="flex-five">&nbsp;</div>
+                  <div class="flex-five">#</div>
+                  <div class="flex-twenty sortable">Name</div>
+                  <div class="flex-twenty sortable">Artist</div>
+                  <div class="flex-fifteen">&nbsp;
+                    Genre
+                  </div>
+                  <div class="flex-ten sortable">
+                    Length
+                  </div>
+                  <div class="flex-ten sortable">
+                    Tempo
+                  </div>
+                  <div class="flex-five sortable">Key</div>
+                  <div class="flex-ten">&nbsp;</div>
+                </div>
+                <div class="table-content-wrapper" [dragula]='"second-bag"'>
+                  <div *ngFor="let setlistSong of setlistSongs">
+                    <div *ngIf="!setlistSong.isBreak" class="flex flex-row flex-hundred justify-start align-center flex-wrap table-content">
+                      <input type="hidden" class="song-key" value="{{setlistSong.$key}}"/>
+                      <div class="flex-five">
+                        <i class="fa fa-drag-handle" aria-hidden="true"></i>
+                      </div>
+                      <div class="flex-five">{{setlistSong.displaySequenceNumber}}</div>
+                      <div class="flex-twenty song-name" (click)="onRowClick(setlistSong)">
+                        {{ setlistSong.name}}
+                      </div>
+                      <div class="flex-twenty">
+                        {{ setlistSong.artist}}
+                      </div>
+                      <div class="flex-fifteen">
+                        {{ setlistSong.genre}}
+                      </div>
+                      <div class="flex-ten">
+                        {{ setlistSong.length | secondsToMinutes}}
+                      </div>
+                      <div class="flex-ten">
+                        {{ setlistSong.tempo}}
+                      </div>
+                      <div class="flex-five">
+                        {{ setlistSong.songKey}}
+                      </div>
+                      <div class="flex-ten pull-right">
+                        <button class="btn btn-white btn-xs" (click)="onEdit(setlistSong)"> <span class="fa fa-pencil"></span></button>
+                        <button class="btn btn-white btn-xs" (click)="removeSetlistSong(setlistSong)"> <span class="fa fa-trash"></span></button>
+                      </div>
+                    </div>
+                    <div *ngIf="setlistSong.isBreak" class="flex flex-row flex-hundred set-break justify-start align-center flex-wrap table-content">
+                      <input type="hidden" class="song-key" value="{{setlistSong.$key}}"/>
+                      <div class="flex-five">
+                        <i class="fa fa-drag-handle" aria-hidden="true"></i>
+                      </div>
+                      <div class="flex-five"></div>
+                      <div class="flex-forty song-name">
+                        {{ setlistSong.name}} Break
+                      </div>
+                      <div class="flex-forty">
+                        {{ setlistSong.other}}
+                      </div>
+                      <div class="flex-ten pull-right">
+                        <button class="btn btn-white btn-xs" style="visibility: hidden" (click)="onEdit(setlistSong)"> <span class="fa fa-pencil"></span></button>
+                        <button class="btn btn-white btn-xs" (click)="removeSetlistSong(setlistSong)"> <span class="fa fa-trash"></span></button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <song-edit #songEdit></song-edit>
+  <song-lyric #songLyric></song-lyric>
+</div>
+

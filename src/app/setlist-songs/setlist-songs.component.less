@@ -1,0 +1,99 @@
+
+#setlist-songs-wrapper {
+  .setlist-songs {
+    .table-content-wrapper {
+      height: ~'calc(100vh - 275px)';
+      overflow: auto;
+    }
+  }
+  .song-catalog {
+    .table-content-wrapper {
+      height: ~'calc(100vh - 245px)';
+      overflow: auto;
+    }
+  }
+
+  .breadcrumb{
+    padding-top:10px;
+    padding-bottom:10px;
+  }
+
+  .song-catalog{
+    .fa-plus {
+      cursor: pointer;
+    }
+    .song-catalog-row{
+      cursor: move;
+    }
+  }
+  .set-break{
+    background-color:lightyellow;
+  }
+
+  .setlist-songs {
+    .song-row {
+      cursor: move;
+      cursor: grab;
+      cursor: -moz-grab;
+      cursor: -webkit-grab;
+    }
+
+    .fa-plus {
+      cursor: pointer;
+    }
+
+    .gu-unselectable {
+      background-color: blue;
+    }
+
+    .song-name{
+      cursor:pointer;
+    }
+
+    .fa-drag-handle:before {
+      content: "\f142 \f142";
+      letter-spacing: 0.1em;
+      cursor: grab;
+      cursor: move;
+    }
+
+    /* \f142 is ellipsis-v */
+    /* \202F is thin unbreakable space */
+    .fa.fa-grip:before {
+      content: "\f142 \202F \f142 \202F \f142";
+    }
+    .fa.fa-grip-large:before {
+      content: "\f142 \202F \f142 \202F \f142 \202F \f142 \202F \f142 \202F \f142 \202F \f142";
+    }
+
+    .grip-cell {
+      cursor: move;
+      cursor: grab;
+      cursor: -moz-grab;
+      cursor: -webkit-grab;
+    }
+
+    .gu-mirror {
+      margin: 10px;
+      padding: 10px;
+      background-color: rgba(255, 255, 255, 0.3);
+      transition: opacity 0.4s ease-in-out;
+    }
+
+    .gu-transit {
+      background-color: #a3a3a3;
+    }
+    .container .ex-moved {
+      background-color: #e74c3c;
+    }
+    .container.ex-over {
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+    .handle {
+      padding: 0 5px;
+      margin-right: 5px;
+      background-color: rgba(0, 0, 0, 0.4);
+      cursor: move;
+    }
+  }
+}

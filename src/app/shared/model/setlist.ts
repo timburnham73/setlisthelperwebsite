@@ -1,12 +1,12 @@
+import {Song} from './song';
 
 export class Setlist {
   constructor(
-    public $key: string,
+    public setlistId: number,
     public name: string,
     public gigLocation: string,
-    public createDate: string,
-    public gigDate: string,
-    public accountId: string
+    public lastEdit: string,
+    public gigDate: string
 ) {
 
 }
@@ -17,21 +17,29 @@ static fromJsonArray(array): Setlist[] {
 
 }
 
+  static toJson(setlist: Setlist) {
+    return {
+      'SetlistId': setlist.setlistId,
+      'Name': setlist.name ? setlist.name : '',
+      'LastEdit': setlist.lastEdit ? setlist.lastEdit : '',
+      'GigLocation': setlist.gigLocation,
+      'GigDate': setlist.gigDate
+    };
+  }
+
 static fromJson({
-  $key,
-  name,
-  gigLocation,
-  createDate,
-  gigDate,
-  accountId
+    setlistId,
+    name,
+    gigLocation,
+    lastEdit,
+    gigDate
 }
 ): Setlist {
   return new Setlist(
-    $key,
+    setlistId,
     name,
     gigLocation,
-    createDate,
-    gigDate,
-  accountId);
+    lastEdit,
+    gigDate);
 }
 }

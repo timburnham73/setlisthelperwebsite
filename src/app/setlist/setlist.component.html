@@ -1,0 +1,77 @@
+<app-top-menu></app-top-menu>
+<div id="setlist-page-wrapper" class="gray-bg">
+  <div class="wrapper wrapper-content  animated fadeInRight">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="ibox">
+          <div class="ibox-title">
+            <ol class="breadcrumb">
+              <li>
+                <a href="javascript:void(0)" [routerLink]="['/accounts']">{{account?.name}}</a>
+              </li>
+              <li class="active">
+                <strong>Setlists</strong>
+              </li>
+            </ol>
+          </div>
+          <div class="ibox-content">
+
+            <div class="m-b-sm">
+
+              <div class="m-t-md">
+                <div>
+                  <button type="button"
+                          (click)="addNew()"
+                          class="btn btn-sm btn-white">
+                    <i class="glyphicon glyphicon-plus"></i>
+                    &nbsp;Add
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex-hundred justify-start">
+              <div class="flex flex-row flex-hundred justify-start align-center flex-wrap table-header">
+                <div class="flex-forty sortable" (click)="setSortOrder('name')">
+                  Name
+                  <i class="fa fa-long-arrow-down" *ngIf="orderByColumnName === 'name'" aria-hidden="true"></i>
+                </div>
+                <div class="flex-twenty sortable" (click)="setSortOrder('location')">
+                  Location
+                  <i class="fa fa-long-arrow-down" *ngIf="orderByColumnName === 'artist'" aria-hidden="true"></i>
+                </div>
+                <div class="flex-twenty">&nbsp;
+                  Gig Date
+                </div>
+                <div class="flex-twenty">&nbsp;</div>
+              </div>
+              <div class="table-content-wrapper">
+                <div class="flex flex-row flex-hundred justify-start align-center flex-wrap table-content"
+                     *ngFor="let setlist of setlists"
+                >
+                  <div class="flex-forty" [routerLink]="[setlist.SetListId, 'songs']">
+                    {{ setlist.Name}}
+                  </div>
+                  <div class="flex-twenty">
+                    {{ setlist.GigLocation }}
+                  </div>
+                  <div class="flex-twenty">
+                    {{ setlist.GigDate | date:'short'}}
+                  </div>
+                  <div class="flex-twenty pull-right">
+                    <button class="btn btn-white btn-xs" (click)="onEdit(setlist)">Edit</button>
+                    <button class="btn btn-white btn-xs" (click)="deleteSetlist(setlist)">Delete</button>
+                    <button class="btn btn-white btn-xs" (click)="duplicateSetlist(setlist)">Duplicate</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<app-setlist-edit #setlistEdit></app-setlist-edit>
+

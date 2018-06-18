@@ -34,4 +34,9 @@ export class SLHHttpClient {
     const options  = this.getAuthTokenInfo();
     return this.http.put(url, data, options);
   }
+
+  delete(url) {
+    const options  = this.getAuthTokenInfo();
+    return this.http.delete(url, options);
+  }
 }

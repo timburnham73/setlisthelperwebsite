@@ -10,19 +10,10 @@
     <div class="navbar-collapse collapse" id="navbar">
       <ul class="nav navbar-nav" *ngIf="authService.authenticated && showlinks">
         <li routerLinkActive="active">
-          <a aria-expanded="false" role="button" [routerLink]="['/accounts',accountId,'songs']"><i class="fa fa-music"></i> Songs</a>
+          <a aria-expanded="false" role="button" [routerLink]="['/songs']"><i class="fa fa-music"></i> Songs</a>
         </li>
         <li routerLinkActive="active">
-          <a aria-expanded="false" role="button" [routerLink]="['/accounts', accountId, 'setlists']"><i class="fa fa-list-ol"></i> Setlists</a>
-        </li>
-        <li routerLinkActive="active">
-          <a aria-expanded="false" role="button" [routerLink]="['/accounts',accountId,'artists']"><i class="fa fa-id-card"></i> Artists</a>
-        </li>
-        <li routerLinkActive="active">
-          <a aria-expanded="false" role="button" [routerLink]="['/accounts',accountId,'genres']"><i class="fa fa-book"></i> Genres</a>
-        </li>
-        <li routerLinkActive="active">
-          <a aria-expanded="false" role="button" [routerLink]="['/accounts',accountId,'tags']"><i class="fa fa-tag"></i> Tags</a>
+          <a aria-expanded="false" role="button" [routerLink]="['/setlists']"><i class="fa fa-list-ol"></i> Setlists</a>
         </li>
         <li>
         </li>

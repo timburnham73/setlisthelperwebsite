@@ -21,12 +21,15 @@ import {DragulaModule} from 'ng2-dragula';
 import { BsModalModule } from 'ng2-bs3-modal';
 import {AuthService} from './shared/security/auth.service';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {SongEditComponent} from './song-edit/song-edit.component';
+import {SongEditComponent} from './song-edit';
 import {SLHHttpClient} from './shared/web/HttpClient';
 import {Safe, SongLyricComponent} from './song-lyric';
 import {FontColorDropdownComponent} from './shared/font-color-dropdown';
 import {DropdownComponent} from './shared/dropDownList';
 import {SongImportComponent} from './song-import/song-import.component';
+import {SetlistComponent} from './setlist/setlist.component';
+import {SetlistService} from './shared/services/setlist.service';
+import {SetlistEditComponent} from './setlist-edit/setlist-edit.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +48,8 @@ import {SongImportComponent} from './song-import/song-import.component';
     DropdownComponent,
     FontColorDropdownComponent,
     SongImportComponent,
+    SetlistComponent,
+    SetlistEditComponent
 
   ],
   imports: [
@@ -65,6 +70,7 @@ import {SongImportComponent} from './song-import/song-import.component';
   providers: [
     appRoutingProviders,
     SongService,
+    SetlistService,
     AuthGuard,
     AuthService,
     SLHHttpClient
