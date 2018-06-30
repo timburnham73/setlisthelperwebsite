@@ -29,7 +29,7 @@ export class SongService {
       .take(1);
   }
 
-  search(searchText): Observable<Song[]> {
+  searchSongs(searchText): Observable<Song[]> {
     return this._http.get(this.actionUrl + `?search=${searchText}`)
       .pipe(
         catchError(this.handleError)
