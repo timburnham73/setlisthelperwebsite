@@ -94,8 +94,7 @@ export class SongsComponent implements OnInit {
     if(termToSearch === ''){
       this.songService.findAllSongs(this.startingIndex, this.pageSize)
       .map((songs) => {
-        return songs.filter(song => ((termToSearch === '')
-          || (song.Name.toLowerCase().includes(termToSearch.toLowerCase()))));
+        return songs;
       })
       .subscribe(songs => {
         this.songs = this.songs.concat(songs);
