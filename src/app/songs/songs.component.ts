@@ -88,17 +88,28 @@ export class SongsComponent implements OnInit {
   }
 
   onSearch(termToSearch) {
-
-    this.songService.findAllSongs(this.startingIndex, this.pageSize)
+    // Call new service 
+    if(termToSearch === ''){
+      this.songService.findAllSongs(this.startingIndex, this.pageSize)
       .map((songs) => {
         return songs.filter(song => ((termToSearch === '')
-          || (termToSearch && song.Name.toLowerCase().includes(termToSearch.toLowerCase()))));
+          || (song.Name.toLowerCase().includes(termToSearch.toLowerCase()))));
       })
       .subscribe(songs => {
         this.songs = this.songs.concat(songs);
-        console.log(this.songs);
+      });
+    }
+    else{
+      this.songService.searchSongs(termToSearch)
+      .map((songs) => {
+        return songs;
+      })
+      .subscribe(songs => {
+        this.songs = songs;
       });
 
+    }
+    
   }
 
   onScroll() {
