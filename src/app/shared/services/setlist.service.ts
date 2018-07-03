@@ -31,8 +31,8 @@ export class SetlistService {
       );
   }
 
-  getSetlist(setlistId: string): Observable<Setlist> {
-    return this._http.get(this.actionUrl + `?id=${setlistId}`)
+  getSetlist(setlistId: string): Observable<any> {
+    return this._http.get(`${this.actionUrl}?id=${setlistId}`)
       .pipe(
         catchError(this.handleError)
       );
@@ -40,8 +40,8 @@ export class SetlistService {
 
   //Returns the setlist key
   createSetlist(setlist: Setlist): Observable<Setlist> {
-    setlist.lastEdit = new Date().toISOString();
-    setlist.setlistId = -1;
+    setlist.LastEdit = new Date().toISOString();
+    setlist.SetListId = -1;
     const setlistJson = Setlist.toJson(setlist);
     return this._http.post(this.actionUrl, setlistJson)
       .pipe(
@@ -50,8 +50,8 @@ export class SetlistService {
   }
 
   updateSetlist(setlistId: number, setlist: Setlist) {
-    setlist.lastEdit = new Date().toISOString();
-    setlist.setlistId = setlistId;
+    setlist.LastEdit = new Date().toISOString();
+    setlist.SetListId = setlistId;
     const setlistJson = Setlist.toJson(setlist);
     return this._http.put(this.actionUrl, setlistJson)
       .pipe(
@@ -59,7 +59,7 @@ export class SetlistService {
       );
   }
   deleteSetlist(setlist: Setlist): Observable<string> {
-    const setlistId = setlist.setlistId;
+    const setlistId = setlist.SetListId;
     return this._http.delete(this.actionUrl + `?id=${setlistId}`)
       .pipe(
         catchError(this.handleError)
@@ -67,16 +67,16 @@ export class SetlistService {
   }
 
   duplicateSetlist(setlist: Setlist): Observable<Setlist> {
-    setlist.name += ' copy';
+    setlist.Name += ' copy';
     return this.createSetlist(setlist);
   }
 
-  /*getSetlistSongs(setlistId: string) {
+  /*getSetlistSongs(SetListId: string) {
     let setlistSongsReturn = [];
     return this.db.list(`/setlistSongs/`, {
       query: {
-        orderByChild: 'setlistId',
-        equalTo: setlistId
+        orderByChild: 'SetListId',
+        equalTo: SetListId
       }
     })
       .map(setlistSongs => _.sortBy(setlistSongs, (song) => song.sequenceNumber ))
@@ -105,8 +105,8 @@ export class SetlistService {
 
   }*/
 
-  /*getSongsForSetlist(setlistId: string, accountId: string, songToSearchFor: string, filterSongsInSetlist: boolean) {
-    return this.getSetlistSongkeys(setlistId)
+  /*getSongsForSetlist(SetListId: string, accountId: string, songToSearchFor: string, filterSongsInSetlist: boolean) {
+    return this.getSetlistSongkeys(SetListId)
       .switchMap(songIds => {
         return this.songService.findAllSongs()
           .map((songs) => {
@@ -120,27 +120,27 @@ export class SetlistService {
   }
 
 
-  addSongToSetlist(setlistId: string, setlistSong: SetlistSong) {
+  addSongToSetlist(SetListId: string, setlistSong: SetlistSong) {
 
       return this.db.list(`/setlistSongs` )
         .push({
           displaySequenceNumber: setlistSong.displaySequenceNumber,
           sequenceNumber: setlistSong.sequenceNumber,
           songId: setlistSong.songId,
-          setlistId: setlistId,
+          SetListId: SetListId,
           isBreak: false
         }).key;
 
   }
 
-  addSongBreak(setlistId: string, sequenceNumber: number, displaySequenceNumber) {
+  addSongBreak(SetListId: string, sequenceNumber: number, displaySequenceNumber) {
 
       return this.db.list(`/setlistSongs` )
         .push({
           displaySequenceNumber: displaySequenceNumber,
           sequenceNumber: sequenceNumber,
           songId: '',
-          setlistId : setlistId,
+          SetListId : SetListId,
           isBreak: true
         }).key;
 

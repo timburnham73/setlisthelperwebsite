@@ -39,11 +39,11 @@ export class TopMenuComponent implements OnInit {
     return this.router.navigate(['/login']);
 
   }
-  onChangePassword(){
+  onChangePassword() {
     // this.changePasswordDialog.open(this.user);
   }
 
-  onEditProfile(){
+  onEditProfile() {
     // this.editUserDialog.open(this.user);
   }
 

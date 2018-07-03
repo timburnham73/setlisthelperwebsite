@@ -6,9 +6,6 @@
         <div class="ibox">
           <div class="ibox-title">
             <ol class="breadcrumb">
-              <li>
-                <a href="javascript:void(0)" [routerLink]="['/accounts']">{{account?.name}}</a>
-              </li>
               <li class="active" *ngIf="!artistId && !genreId && !tagId">
                 <strong class="pull-right song-count adv-bread">{{songCount}} Songs</strong>
                 <strong class="simple-bread">Songs</strong>
@@ -43,7 +40,7 @@
             <div class="m-b-sm" *ngIf="!artistId && !genreId">
 
               <div class="input-search-wrapper">
-                <input type="text" placeholder="Search by Name..."
+                <input type="text" placeholder="Search by Name or Artist"
                        [formControl]="term"
                        class="form-control"/>
               </div>

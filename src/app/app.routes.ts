@@ -7,6 +7,7 @@ import {RegisterComponent} from './account/register/register.component';
 import {HomeComponent} from './home/home.component';
 import {SongImportComponent} from './song-import/song-import.component';
 import {SetlistComponent} from './setlist/setlist.component';
+import {SetlistSongsComponent} from './setlist-songs';
 
 
 const routes: Routes = [
@@ -15,7 +16,18 @@ const routes: Routes = [
   { path: 'passwordreset', component: PasswordResetComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'songs', component: SongsComponent },
-  { path: 'setlists', component: SetlistComponent , canActivate: [AuthGuard] },
+  { path: 'setlists', children: [
+      {
+        path: '',
+        component: SetlistComponent
+      },
+      {
+        path: ':setlistid/songs',
+        component: SetlistSongsComponent
+      }]
+    ,
+    canActivate: [AuthGuard]
+  },
   { path: 'import', component: SongImportComponent},
   { path: '', component: HomeComponent, canActivate: [AuthGuard] },
   { path: '**', component: HomeComponent, canActivate: [AuthGuard] }

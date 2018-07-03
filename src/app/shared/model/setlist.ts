@@ -2,11 +2,15 @@ import {Song} from './song';
 
 export class Setlist {
   constructor(
-    public setlistId: number,
-    public name: string,
-    public gigLocation: string,
-    public lastEdit: string,
-    public gigDate: string
+    public SetListId: number,
+    public Name: string,
+    public GigLocation: string,
+    public LastEdit: string,
+    public GigDate: string,
+    public CreatedByUserId: string,
+    public Deleted: boolean,
+    public Deprecated: boolean,
+    public MakePublic: boolean
 ) {
 
 }
@@ -17,13 +21,33 @@ static fromJsonArray(array): Setlist[] {
 
 }
 
+  static createNewSetlist(): Setlist {
+    const newDate = new Date().toISOString();
+    const newSetlist: Setlist = new Setlist(
+      -1,
+      '',
+      '',
+      new Date().toISOString(),
+      new Date().toISOString(),
+      '',
+      false,
+      false,
+      false);
+    return newSetlist;
+  }
+
   static toJson(setlist: Setlist) {
     return {
-      'SetlistId': setlist.setlistId,
-      'Name': setlist.name ? setlist.name : '',
-      'LastEdit': setlist.lastEdit ? setlist.lastEdit : '',
-      'GigLocation': setlist.gigLocation,
-      'GigDate': setlist.gigDate
+      'SetListId': setlist.SetListId,
+      'Name': setlist.Name ? setlist.Name : '',
+      'LastEdit': setlist.LastEdit ? new Date(setlist.LastEdit).toISOString() : '',
+      'GigLocation': setlist.GigLocation,
+      'GigDate': setlist.GigDate,
+      'CreatedByUserId': setlist.CreatedByUserId,
+      'Deleted': setlist.Deleted,
+      'Deprecated': setlist.Deprecated,
+      'MakePublic': setlist.MakePublic
+
     };
   }
 
@@ -32,7 +56,13 @@ static fromJson({
     name,
     gigLocation,
     lastEdit,
-    gigDate
+    gigDate,
+    createdByUserName,
+    createdByUserId,
+    dateCreated,
+    deleted,
+    deprecated,
+    makePublic
 }
 ): Setlist {
   return new Setlist(
@@ -40,6 +70,10 @@ static fromJson({
     name,
     gigLocation,
     lastEdit,
-    gigDate);
+    gigDate,
+    createdByUserId,
+    deleted,
+    deprecated,
+    makePublic);
 }
 }

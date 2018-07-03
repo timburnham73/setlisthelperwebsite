@@ -30,6 +30,42 @@ import {SongImportComponent} from './song-import/song-import.component';
 import {SetlistComponent} from './setlist/setlist.component';
 import {SetlistService} from './shared/services/setlist.service';
 import {SetlistEditComponent} from './setlist-edit/setlist-edit.component';
+import {
+  MatAutocompleteModule,
+  MatButtonModule,
+  MatButtonToggleModule,
+  MatCardModule,
+  MatCheckboxModule,
+  MatChipsModule,
+  MatDatepickerModule,
+  MatDialogModule,
+  MatDividerModule,
+  MatExpansionModule,
+  MatFormField,
+  MatGridListModule,
+  MatIconModule,
+  MatInputModule,
+  MatListModule,
+  MatMenuModule,
+  MatNativeDateModule,
+  MatPaginatorModule,
+  MatProgressBarModule,
+  MatProgressSpinnerModule,
+  MatRadioModule,
+  MatRippleModule,
+  MatSelectModule,
+  MatSidenavModule,
+  MatSliderModule,
+  MatSlideToggleModule,
+  MatSnackBarModule,
+  MatSortModule,
+  MatStepperModule,
+  MatTableModule,
+  MatTabsModule,
+  MatToolbarModule,
+  MatTooltipModule,
+} from '@angular/material';
+import {SetlistSongsComponent} from './setlist-songs';
 
 @NgModule({
   declarations: [
@@ -49,7 +85,8 @@ import {SetlistEditComponent} from './setlist-edit/setlist-edit.component';
     FontColorDropdownComponent,
     SongImportComponent,
     SetlistComponent,
-    SetlistEditComponent
+    SetlistEditComponent,
+    SetlistSongsComponent
 
   ],
   imports: [
@@ -65,7 +102,10 @@ import {SetlistEditComponent} from './setlist-edit/setlist-edit.component';
     ReactiveFormsModule,
     InfiniteScrollModule,
     BsModalModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatInputModule
   ],
   providers: [
     appRoutingProviders,

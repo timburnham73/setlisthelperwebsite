@@ -1,5 +1,5 @@
-<div id="setlist-edit-wrapper">
-  <bs-modal #songEditModal class="song-edit-modal">
+
+  <bs-modal #setlistEditModal class="song-edit-modal">
     <bs-modal-header [showDismiss]="true">
       <h4 class="modal-title">Song Edit</h4>
     </bs-modal-header>
@@ -12,22 +12,35 @@
                     <div class="form-group">
                       <label class="col-sm-2 control-label">Name:</label>
                       <div class="col-sm-10">
-                        <input type="text" class="form-control" formControlName="name" >
-                        <div class="field-error-message" *ngIf="isErrorVisible('name','required')">Name is required</div>
+                        <input type="text" class="form-control" formControlName="Name" >
+                        <div class="field-error-message" *ngIf="isErrorVisible('Name','required')">Name is required</div>
+                        <input type="hidden" formControlName="LastEdit" value="">
+                        <input type="hidden" formControlName="CreatedByUserId" value="">
+                        <input type="hidden" formControlName="CreatedByUserName" value="">
+                        <input type="hidden" formControlName="DateCreated" value="">
+                        <input type="hidden" formControlName="Deleted" value="">
+                        <input type="hidden" formControlName="Deprecated" value="">
+                        <input type="hidden" formControlName="MakePublic" value="">
                       </div>
                     </div>
                     <div class="form-group">
                       <label class="col-sm-2 control-label">Location:</label>
-                      <div class="col-sm-10"><input type="text" class="form-control" formControlName="gigLocation" value=""></div>
+                      <div class="col-sm-10"><input type="text" class="form-control" formControlName="GigLocation" value=""></div>
                     </div>
                     <div class="form-group"><label class="col-sm-2 control-label gig-date" >Gig Date:</label>
                       <div class="col-sm-10">
-
+                        <mat-form-field>
+                          <input matInput [matDatepicker]="picker" formControlName="GigDate"  placeholder="Choose a gig date">
+                          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                          <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
                       </div>
                     </div>
-                    <div class="form-group"><label class="col-sm-2 control-label gig-date" >Gig Time:</label>
+                    <div class="form-group"><label class="col-sm-2 control-label gig-date"  >Gig Time:</label>
                       <div class="col-sm-10">
-
+                        <mat-form-field class="example-full-width">
+                          <input matInput type="time" placeholder="Gig time" formControlName="GigTime" value="10:00PM">
+                        </mat-form-field>
                       </div>
                     </div>
                   </div>
@@ -44,4 +57,3 @@
       </button>
     </bs-modal-footer>
   </bs-modal>
-</div>

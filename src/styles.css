@@ -1,3 +1,4 @@
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
 /* You can add global styles to this file, and also import other style files */
 #page-wrapper{
   padding:0px;
@@ -323,4 +324,16 @@
 
 .field-error-message{
   color:red;
+}
+
+.navbar{
+  margin-bottom:0px;
+}
+
+.navbar-top-links li a{
+  padding:15px 10px;
+}
+
+.cdk-overlay-container {
+  z-index: 2300
 }

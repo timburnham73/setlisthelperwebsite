@@ -30,7 +30,7 @@ export class SetlistSongsComponent implements OnInit {
   showSongs: Boolean;
 
   songs: Song[];
-  setlistSongs: SetlistSong[];
+  setlistSongs: any[];
   setlist: Setlist;
 
   songCount = 0;
@@ -79,21 +79,26 @@ export class SetlistSongsComponent implements OnInit {
     this.sub = this.route.params.subscribe(params => {
       this.setlistId = params['setlistid'];
 
-      this.setlistService.getSetlist(this.setlistId).subscribe(setlistSongs => {
-        //this.setlistSongs = setlistSongs;
-        this.songCount = 0;
-        this.breakCount = 0;
-        /*for (let i = 0; i < setlistSongs.length; i++) {
-          const setlistSong = setlistSongs[i];
-          if (setlistSong.isBreak === true) {
-            this.breakCount++;
-          } else {
-            this.songCount++;
+      this.setlistService.getSetlist(this.setlistId)
+        .subscribe(setlist => {
+          this.setlist = setlist;
+          this.setlistSongs = setlist.setlistSongs;
+          this.songCount = 0;
+          this.breakCount = 0;
+          let displaySequenceNumber = 1;
+          for (let i = 0; i < this.setlistSongs.length; i++) {
+            const setlistSong = this.setlistSongs[i];
+            if (setlistSong.song.SongType === 1) {
+              setlistSong.isBreak = true;
+              setlistSong.displaySequenceNumber = -1;
+              this.breakCount++;
+            } else {
+              setlistSong.isBreak = false;
+              setlistSong.displaySequenceNumber = displaySequenceNumber++;
+              this.songCount++;
+            }
           }
-        }*/
       });
-      this.setlistService.getSetlist(this.setlistId).subscribe(setlist => this.setlist = setlist);
-
     });
 
 
@@ -102,7 +107,7 @@ export class SetlistSongsComponent implements OnInit {
 
   refreshSongs() {
     //Get the setlist songs then filter the song by them.
-    //const songsNotInSetlist$ = this.setlistService.getSongsForSetlist(this.setlistId, this.accountId, this.songToSearchFor, false);
+    //const songsNotInSetlist$ = this.setlistService.getSongsForSetlist(this.SetListId, this.accountId, this.songToSearchFor, false);
 
 
     //songsNotInSetlist$.subscribe(songs => this.songs = songs);
@@ -141,13 +146,13 @@ export class SetlistSongsComponent implements OnInit {
       sequenceNumbers.displaySequenceNumber,
       song.$key);
 
-    //this.setlistService.addSongToSetlist(this.setlistId, newSetlistSong);
+    //this.setlistService.addSongToSetlist(this.SetListId, newSetlistSong);
 
   }
 
   addBreak() {
     const sequenceNumbers = this.getLastSequenceNumbers();
-    //this.setlistService.addSongBreak(this.setlistId, sequenceNumbers.sequenceNumber, sequenceNumbers.displaySequenceNumber);
+    //this.setlistService.addSongBreak(this.SetListId, sequenceNumbers.sequenceNumber, sequenceNumbers.displaySequenceNumber);
   }
 
   addSongToSetlistAtKey(keyOfSongToAdd, keyOfSongToInsertAt) {
@@ -162,7 +167,7 @@ export class SetlistSongsComponent implements OnInit {
       //Add the new item
       if (this.setlistSongs[i].songId === keyOfSongToInsertAt) {
         /*this.af.database
-          .list(`/setlists/` + this.setlistId + `/songs` )
+          .list(`/setlists/` + this.SetListId + `/songs` )
           .push({
             displaySequenceNumber: sequenceNumber,
             sequenceNumber: sequenceNumber,
@@ -175,7 +180,7 @@ export class SetlistSongsComponent implements OnInit {
       if (startReorder === true) {
         //Increment the new items
         /*this.af.database
-          .object('/setlists/' + this.setlistId + '/songs/' + this.setlistSongs[i].$key)
+          .object('/setlists/' + this.SetListId + '/songs/' + this.setlistSongs[i].$key)
           .update(
             {
               displaySequenceNumber: sequenceNumber,
@@ -187,7 +192,7 @@ export class SetlistSongsComponent implements OnInit {
     //Added as the last song so just add it and be done.
     if (startReorder === false) {
       /*this.af.database
-        .list(`/setlists/` + this.setlistId + `/songs` )
+        .list(`/setlists/` + this.SetListId + `/songs` )
         .push({
           displaySequenceNumber: sequenceNumber,
           sequenceNumber: sequenceNumber,
@@ -217,7 +222,7 @@ export class SetlistSongsComponent implements OnInit {
 
   updateAllSetlistSongs(setlistSongs: SetlistSong[]) {
     for (let i = 0; i < setlistSongs.length; i++) {
-      //this.setlistService.updateSetlistSong(this.setlistId, setlistSongs[i]);
+      //this.setlistService.updateSetlistSong(this.SetListId, setlistSongs[i]);
     }
   }
 
@@ -233,7 +238,7 @@ export class SetlistSongsComponent implements OnInit {
   }
 
   removeSetlistSong(setlistSong) {
-    //this.setlistService.removeSetlistSong(this.setlistId, setlistSong);
+    //this.setlistService.removeSetlistSong(this.SetListId, setlistSong);
     //reorder the songs.
     const setlistSongs: SetlistSong[] = this.reorderSetlistSongs(this.setlistSongs);
     this.updateAllSetlistSongs(setlistSongs);

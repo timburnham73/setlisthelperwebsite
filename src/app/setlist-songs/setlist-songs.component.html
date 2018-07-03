@@ -1,4 +1,4 @@
-<top-menu></top-menu>
+<app-top-menu></app-top-menu>
 <div id="setlist-songs-wrapper">
   <div id="page-wrapper setlist-songs" class="gray-bg">
     <div class="wrapper wrapper-content  animated fadeInRight">
@@ -61,13 +61,10 @@
             <div class="ibox-title">
               <ol class="breadcrumb">
                 <li>
-                  <a href="javascript:void(0)" [routerLink]="['/accounts']">{{account?.name}}</a>
-                </li>
-                <li>
-                  <a href="javascript:void(0)" [routerLink]="['/accounts',accountId,'setlists']">Setlists</a>
+                  <a href="javascript:void(0)" [routerLink]="['/setlists']">Setlists</a>
                 </li>
                 <li class="active">
-                  <strong>{{setlist?.name}} </strong>
+                  <strong>{{setlist?.Name}} </strong>
                 </li>
               </ol>
             </div>
@@ -107,28 +104,28 @@
                 <div class="table-content-wrapper" [dragula]='"second-bag"'>
                   <div *ngFor="let setlistSong of setlistSongs">
                     <div *ngIf="!setlistSong.isBreak" class="flex flex-row flex-hundred justify-start align-center flex-wrap table-content">
-                      <input type="hidden" class="song-key" value="{{setlistSong.$key}}"/>
+                      <input type="hidden" class="song-key" value="{{setlistSong.SongSetListId}}"/>
                       <div class="flex-five">
                         <i class="fa fa-drag-handle" aria-hidden="true"></i>
                       </div>
                       <div class="flex-five">{{setlistSong.displaySequenceNumber}}</div>
                       <div class="flex-twenty song-name" (click)="onRowClick(setlistSong)">
-                        {{ setlistSong.name}}
+                        {{ setlistSong.song.Name}}
                       </div>
                       <div class="flex-twenty">
-                        {{ setlistSong.artist}}
+                        {{ setlistSong.song.Artist?.Name}}
                       </div>
                       <div class="flex-fifteen">
-                        {{ setlistSong.genre}}
+                        {{ setlistSong.song.Genre?.Name}}
                       </div>
                       <div class="flex-ten">
-                        {{ setlistSong.length | secondsToMinutes}}
+                        {{ setlistSong.song.SongLength | secondsToMinutes}}
                       </div>
                       <div class="flex-ten">
-                        {{ setlistSong.tempo}}
+                        {{ setlistSong.song.Tempo}}
                       </div>
                       <div class="flex-five">
-                        {{ setlistSong.songKey}}
+                        {{ setlistSong.song.Key}}
                       </div>
                       <div class="flex-ten pull-right">
                         <button class="btn btn-white btn-xs" (click)="onEdit(setlistSong)"> <span class="fa fa-pencil"></span></button>
@@ -164,7 +161,7 @@
 
   </div>
 
-  <song-edit #songEdit></song-edit>
-  <song-lyric #songLyric></song-lyric>
+  <app-song-edit #songEdit></app-song-edit>
+  <app-song-lyric #songLyric></app-song-lyric>
 </div>
 
