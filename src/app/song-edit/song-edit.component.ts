@@ -21,8 +21,7 @@ export class SongEditComponent implements OnInit {
   private sub: any;
   private isNew: boolean;
   public song: any;
-  private accountId: string;
-  private uid: string;
+  private isSaving: boolean;
   public myForm: FormGroup; // our model driven form
   constructor(private route: ActivatedRoute,
               private fb: FormBuilder,
@@ -32,7 +31,6 @@ export class SongEditComponent implements OnInit {
 
   ngOnInit() {
     this.isNew = false;
-    this.accountId = 'someguid';
     const SongLength = 180;
     const songLengthMinSec = Song.getSongLengthMinSec(SongLength);
     this.song = Song.createNewSong();
@@ -137,11 +135,12 @@ export class SongEditComponent implements OnInit {
     model.SongLength += model.LengthSec;
     delete model.LengthMin;
     delete model.LengthSec;
-
+    this.isSaving = true;
     if (this.isNew === true) {
       model.createDate = new Date();
       this.songService.createSong(model).do(updatedSong => console.log(`update song ${updatedSong}`))
         .subscribe(updatedSong => {
+          this.isSaving = false;
           const returnSong: Song = Song.fromJson(updatedSong.song);
           this.closeModal.emit(returnSong);
           this.modal.close();
@@ -151,6 +150,7 @@ export class SongEditComponent implements OnInit {
       this.songService.updateSong(model.SongId, model)
         .do(updatedSong => console.log(`update song ${updatedSong}`))
         .subscribe(updatedSong => {
+          this.isSaving = false;
           const returnSong: Song = Song.fromJson(updatedSong);
           this.closeModal.emit(returnSong);
           this.modal.close();

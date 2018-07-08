@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {Observable} from 'rxjs';
+
 
 import {ActivatedRoute, Router} from '@angular/router';
 import {DragulaService} from 'ng2-dragula/components/dragula.provider';
@@ -11,6 +11,8 @@ import {Account} from '../shared/model/account';
 import {Song} from '../shared/model/song';
 import {SongLyricComponent} from '../song-lyric';
 import {SetlistSong} from '../shared/model/setlist-song';
+import {SongService} from '../shared/services/song.service';
+import {FormControl} from '@angular/forms';
 
 
 
@@ -28,35 +30,39 @@ export class SetlistSongsComponent implements OnInit {
   @ViewChild('songLyric') songLyric: SongLyricComponent;
 
   showSongs: Boolean;
-
-  songs: Song[];
-  setlistSongs: any[];
+  term = new FormControl();
+  setlistSongs: any[]; // This is the setlist song objects with the song object as a child. Used to populate the songsInSetlist object for lyrics
+  songsInSetlist: any[]; // This is the song objects only
+  songCatalogSongs: Song[];
   setlist: Setlist;
-
-  songCount = 0;
+  songCount = 0; // Used in the song catalog picker
+  setlistSongCount = 0;
+  songCountTotal: number;
   breakCount = 0;
-
   setlistId: string;
-  accountId: string;
-  public account: Account;
-
-
-
-
   private sub: any;
   private songToSearchFor;
+  startingIndex: number;
+  pageSize: number;
+  songForEdit: any;
 
   constructor(private route: ActivatedRoute,
               private auth: AuthService,
               private router: Router,
               private dragulaService: DragulaService,
-              private setlistService: SetlistService) {
+              private setlistService: SetlistService,
+              private songService: SongService) {
     this.auth = auth;
-
-
-    dragulaService.setOptions('first-bag', {
-      removeOnSpill: false
+    this.startingIndex = 0;
+    this.pageSize = 50;
+    const bag: any = this.dragulaService.find('first-bag');
+    if (bag !== undefined ) {
+      this.dragulaService.destroy('first-bag');
+    }
+    this.dragulaService.setOptions('first-bag', {
+      revertOnSpill: true
     });
+
     dragulaService.drop.subscribe((value) => {
 
       const songKeyToMove = $(value[1]).find('input.song-key').val();
@@ -70,6 +76,10 @@ export class SetlistSongsComponent implements OnInit {
       }
     });
 
+    this.term.valueChanges
+      .debounceTime(400)
+      .subscribe(term => this.onSearch(term));
+
   }
 
   ngOnInit() {
@@ -78,13 +88,25 @@ export class SetlistSongsComponent implements OnInit {
 
     this.sub = this.route.params.subscribe(params => {
       this.setlistId = params['setlistid'];
-
+      this.songCatalogSongs = [];
+      this.songsInSetlist = [];
       this.setlistService.getSetlist(this.setlistId)
         .subscribe(setlist => {
           this.setlist = setlist;
           this.setlistSongs = setlist.setlistSongs;
-          this.songCount = 0;
+          this.setlistSongCount = 0;
           this.breakCount = 0;
+          this.setlistSongs = this.setlistSongs.sort((song1, song2) => {
+            if (song1.Sequence > song2.Sequence) {
+              return 1;
+            }
+
+            if (song1.Sequence < song2.Sequence) {
+              return -1;
+            }
+
+            return 0;
+          });
           let displaySequenceNumber = 1;
           for (let i = 0; i < this.setlistSongs.length; i++) {
             const setlistSong = this.setlistSongs[i];
@@ -95,22 +117,48 @@ export class SetlistSongsComponent implements OnInit {
             } else {
               setlistSong.isBreak = false;
               setlistSong.displaySequenceNumber = displaySequenceNumber++;
-              this.songCount++;
+              this.setlistSongCount++;
             }
+            this.songsInSetlist.push(setlistSong.song);
           }
       });
+        this.songService.getSongCount()
+      // .do(x => console.log(`Song count total ${x}`))
+        .subscribe(count => {
+          this.songCount = Number(count);
+          this.songCountTotal = Number(count);
+        });
+
+      this.onSearch('');
     });
-
-
-    this.refreshSongs();
   }
 
-  refreshSongs() {
-    //Get the setlist songs then filter the song by them.
-    //const songsNotInSetlist$ = this.setlistService.getSongsForSetlist(this.SetListId, this.accountId, this.songToSearchFor, false);
+  onSearch(termToSearch) {
+    // Call new service
+    if (termToSearch === '') {
+      this.songService.findAllSongs(this.startingIndex, this.pageSize)
+        .map((songs) => {
+          return songs;
+        })
+        .subscribe(songs => {
+          this.songCatalogSongs = this.songCatalogSongs.concat(songs);
+          this.songCount = this.songCountTotal;
+        });
+    } else{
+      this.songService.searchSongs(termToSearch)
+        .map((songs) => {
+          return songs;
+        })
+        .subscribe(songs => {
+          this.songCatalogSongs = songs;
+          this.songCount = songs.length;
+        });
+    }
+  }
 
-
-    //songsNotInSetlist$.subscribe(songs => this.songs = songs);
+  onScroll() {
+    this.startingIndex = this.startingIndex + 50;
+    this.onSearch('');
   }
 
   getLastSequenceNumbers() {
@@ -231,10 +279,32 @@ export class SetlistSongsComponent implements OnInit {
   }
 
   onEdit(setlistSong) {
-    const songKey = setlistSong.songId;
-    const song = _.clone(setlistSong as Song, true);
-    song.$key = songKey;
-    this.songEdit.open(song);
+    this.songForEdit = setlistSong.song;
+    this.songEdit.open(setlistSong.song);
+  }
+
+  onSongEditClose(updatedSong) {
+    if (this.songForEdit != null) {
+      if (this.songForEdit['ArtistId'] && this.songForEdit['ArtistId'] === -1) {
+        this.songForEdit.Artist = {
+          Name: updatedSong.ArtistName
+        };
+      } else if (this.songForEdit['Artist']) {
+        this.songForEdit.Artist['Name'] = updatedSong.ArtistName;
+      }
+
+      if (this.songForEdit['GenreId'] && this.songForEdit['GenreId'] === -1) {
+        this.songForEdit.Genre = {
+          Name: updatedSong.GenreName
+        };
+      } else if (this.songForEdit['Genre']) {
+        this.songForEdit.Genre['Name'] = updatedSong.GenreName;
+      }
+
+      Object.keys(updatedSong).map(((songAttribute, idx) => {
+        this.songForEdit[songAttribute] = updatedSong[songAttribute];
+      }), this);
+    }
   }
 
   removeSetlistSong(setlistSong) {
@@ -242,11 +312,6 @@ export class SetlistSongsComponent implements OnInit {
     //reorder the songs.
     const setlistSongs: SetlistSong[] = this.reorderSetlistSongs(this.setlistSongs);
     this.updateAllSetlistSongs(setlistSongs);
-  }
-
-  searchForSong(songToSearchFor) {
-    this.songToSearchFor = songToSearchFor;
-    this.refreshSongs();
   }
 
   moveSetlistSong(setlistSongKeyToMove, setlistSongKeyToStartAt) {

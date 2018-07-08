@@ -41,7 +41,7 @@ export class SongsComponent implements OnInit {
   tagId: string;
   tag: Tag;
   songCount: number;
-  songCountTotal: number;
+    songCountTotal: number;
   startingIndex: number;
   pageSize: number;
 
@@ -90,8 +90,8 @@ export class SongsComponent implements OnInit {
   }
 
   onSearch(termToSearch) {
-    // Call new service 
-    if(termToSearch === ''){
+    // Call new service
+    if (termToSearch === '') {
       this.songService.findAllSongs(this.startingIndex, this.pageSize)
       .map((songs) => {
         return songs;
@@ -100,8 +100,7 @@ export class SongsComponent implements OnInit {
         this.songs = this.songs.concat(songs);
         this.songCount = this.songCountTotal;
       });
-    }
-    else{
+    } else{
       this.songService.searchSongs(termToSearch)
       .map((songs) => {
         return songs;
@@ -110,9 +109,7 @@ export class SongsComponent implements OnInit {
         this.songs = songs;
         this.songCount = songs.length;
       });
-
     }
-    
   }
 
   onScroll() {

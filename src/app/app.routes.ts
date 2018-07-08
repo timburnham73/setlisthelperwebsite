@@ -29,8 +29,8 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   { path: 'import', component: SongImportComponent},
-  { path: '', component: HomeComponent, canActivate: [AuthGuard] },
-  { path: '**', component: HomeComponent, canActivate: [AuthGuard] }
+  { path: '', component: SongsComponent, canActivate: [AuthGuard] },
+  { path: '**', component: SongsComponent, canActivate: [AuthGuard] }
 ];
 
 export const appRoutingProviders: any[] = [
