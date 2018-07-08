@@ -92,6 +92,7 @@ export class SongsComponent implements OnInit {
   }
 
   onSearch(termToSearch) {
+    this.searchString = termToSearch;
     // Call new service
     if (termToSearch === '') {
       this.songService.findAllSongs(this.startingIndex, this.pageSize, this.orderByColumnName, this.orderByColumDirection)
@@ -116,7 +117,7 @@ export class SongsComponent implements OnInit {
 
   onScroll() {
     this.startingIndex = this.startingIndex + 50;
-    this.onSearch('');
+    this.onSearch(this.searchString);
   }
 
   onPrint() {
