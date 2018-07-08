@@ -33,6 +33,7 @@ export class SongsComponent implements OnInit {
   searchString: string;
   term = new FormControl();
   orderByColumnName: string;
+  orderByColumDirection: string;
   accountId: string;
   artistId: string;
   artist: any;
@@ -63,6 +64,7 @@ export class SongsComponent implements OnInit {
     this.pageSize = 50;
     this.searchString = '';
     this.orderByColumnName = 'name';
+    this.orderByColumDirection = "asc";
     this.term.valueChanges
       .debounceTime(400)
       .subscribe(term => this.onSearch(term));
@@ -92,7 +94,7 @@ export class SongsComponent implements OnInit {
   onSearch(termToSearch) {
     // Call new service
     if (termToSearch === '') {
-      this.songService.findAllSongs(this.startingIndex, this.pageSize)
+      this.songService.findAllSongs(this.startingIndex, this.pageSize, this.orderByColumnName, this.orderByColumDirection)
       .map((songs) => {
         return songs;
       })
@@ -101,7 +103,7 @@ export class SongsComponent implements OnInit {
         this.songCount = this.songCountTotal;
       });
     } else{
-      this.songService.searchSongs(termToSearch)
+      this.songService.searchSongs(termToSearch,this.orderByColumnName, this.orderByColumDirection)
       .map((songs) => {
         return songs;
       })
