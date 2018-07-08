@@ -100,7 +100,13 @@ export class SongsComponent implements OnInit {
         return songs;
       })
       .subscribe(songs => {
-        this.songs = this.songs.concat(songs);
+        if(this.startingIndex >= 1){
+          this.songs = this.songs.concat(songs);  
+        }
+        else{
+          this.songs = songs;
+        }
+        
         this.songCount = this.songCountTotal;
       });
     } else{
