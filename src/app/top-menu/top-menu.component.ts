@@ -17,7 +17,7 @@ export class TopMenuComponent implements OnInit {
   showlinks: boolean;
 
   public user: User;
-
+  public username: string;
   constructor(public authService: AuthService,
               public router: Router,
               public route: ActivatedRoute) {
@@ -31,6 +31,7 @@ export class TopMenuComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.accountId = params['accountid'];
+      this.username = localStorage.getItem('username');
     });
   }
 
