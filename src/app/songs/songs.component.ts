@@ -219,6 +219,12 @@ export class SongsComponent implements OnInit {
 
   setSortOrder(columnName) {
     this.orderByColumnName = columnName;
+    if(this.orderByColumDirection === 'asc'){
+      this.orderByColumDirection = 'desc';
+    }
+    else{
+      this.orderByColumDirection = 'asc';
+    }
     this.onSearch(this.searchString);
   }
 
