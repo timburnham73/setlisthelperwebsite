@@ -45,6 +45,8 @@ export class SetlistSongsComponent implements OnInit {
   startingIndex: number;
   pageSize: number;
   songForEdit: any;
+  orderByColumnName: string;
+  orderByColumDirection: string;
 
   constructor(private route: ActivatedRoute,
               private auth: AuthService,
@@ -55,6 +57,8 @@ export class SetlistSongsComponent implements OnInit {
     this.auth = auth;
     this.startingIndex = 0;
     this.pageSize = 50;
+    this.orderByColumnName = "name";
+    this.orderByColumDirection = "asc";
     const bag: any = this.dragulaService.find('first-bag');
     if (bag !== undefined ) {
       this.dragulaService.destroy('first-bag');
@@ -136,7 +140,7 @@ export class SetlistSongsComponent implements OnInit {
   onSearch(termToSearch) {
     // Call new service
     if (termToSearch === '') {
-      this.songService.findAllSongs(this.startingIndex, this.pageSize)
+      this.songService.findAllSongs(this.startingIndex, this.pageSize, this.orderByColumnName, this.orderByColumDirection)
         .map((songs) => {
           return songs;
         })
@@ -145,7 +149,7 @@ export class SetlistSongsComponent implements OnInit {
           this.songCount = this.songCountTotal;
         });
     } else{
-      this.songService.searchSongs(termToSearch)
+      this.songService.searchSongs(termToSearch, this.orderByColumnName, this.orderByColumDirection)
         .map((songs) => {
           return songs;
         })

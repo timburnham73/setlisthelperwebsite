@@ -33,6 +33,7 @@ export class SongsComponent implements OnInit {
   searchString: string;
   term = new FormControl();
   orderByColumnName: string;
+  orderByColumDirection: string;
   accountId: string;
   artistId: string;
   artist: any;
@@ -63,6 +64,7 @@ export class SongsComponent implements OnInit {
     this.pageSize = 50;
     this.searchString = '';
     this.orderByColumnName = 'name';
+    this.orderByColumDirection = "asc";
     this.term.valueChanges
       .debounceTime(400)
       .subscribe(term => this.onSearch(term));
@@ -90,18 +92,25 @@ export class SongsComponent implements OnInit {
   }
 
   onSearch(termToSearch) {
+    this.searchString = termToSearch;
     // Call new service
     if (termToSearch === '') {
-      this.songService.findAllSongs(this.startingIndex, this.pageSize)
+      this.songService.findAllSongs(this.startingIndex, this.pageSize, this.orderByColumnName, this.orderByColumDirection)
       .map((songs) => {
         return songs;
       })
       .subscribe(songs => {
-        this.songs = this.songs.concat(songs);
+        if(this.startingIndex >= 1){
+          this.songs = this.songs.concat(songs);  
+        }
+        else{
+          this.songs = songs;
+        }
+        
         this.songCount = this.songCountTotal;
       });
     } else{
-      this.songService.searchSongs(termToSearch)
+      this.songService.searchSongs(termToSearch,this.orderByColumnName, this.orderByColumDirection)
       .map((songs) => {
         return songs;
       })
@@ -114,7 +123,7 @@ export class SongsComponent implements OnInit {
 
   onScroll() {
     this.startingIndex = this.startingIndex + 50;
-    this.onSearch('');
+    this.onSearch(this.searchString);
   }
 
   onPrint() {
@@ -209,7 +218,18 @@ export class SongsComponent implements OnInit {
   }
 
   setSortOrder(columnName) {
-    this.orderByColumnName = columnName;
+    if(this.orderByColumnName === columnName){
+      if(this.orderByColumDirection === 'asc'){
+        this.orderByColumDirection = 'desc';
+      }
+      else{
+        this.orderByColumDirection = 'asc';
+      }
+    }
+    else{
+      this.orderByColumnName = columnName;
+      this.orderByColumDirection = 'asc';
+    }
     this.onSearch(this.searchString);
   }
 

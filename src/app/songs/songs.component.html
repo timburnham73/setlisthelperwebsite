@@ -91,20 +91,33 @@
 
             <div class="flex-hundred justify-start list-view">
               <div class="flex flex-row flex-hundred justify-start align-center flex-wrap table-header">
-                <div class="flex-1 sortable" (click)="setSortOrder('name')">Name<i class="fa fa-long-arrow-down" *ngIf="orderByColumnName === 'name'" aria-hidden="true"></i></div>
-                <div class="flex-twenty sortable" (click)="setSortOrder('ArtistName')">Artist<i class="fa fa-long-arrow-down" *ngIf="orderByColumnName === 'ArtistName'" aria-hidden="true"></i></div>
+                <div class="flex-1 sortable" (click)="setSortOrder('name')">
+                  Name
+                  <i class="fa fa-long-arrow-down" *ngIf="orderByColumnName === 'name' && orderByColumDirection === 'asc' " aria-hidden="true"></i>
+                  <i class="fa fa-long-arrow-up" *ngIf="orderByColumnName === 'name' && orderByColumDirection === 'desc' " aria-hidden="true"></i>
+                </div>
+                <div class="flex-twenty sortable" (click)="setSortOrder('Artist')">
+                  Artist
+                  <i class="fa fa-long-arrow-down" *ngIf="orderByColumnName === 'Artist' && orderByColumDirection === 'asc' " aria-hidden="true"></i>
+                  <i class="fa fa-long-arrow-up" *ngIf="orderByColumnName === 'Artist' && orderByColumDirection === 'desc' " aria-hidden="true"></i>
+                </div>
                 <div class="flex-fifteen">
                   Genre
                 </div>
                 <div class="flex-fifteen sortable" (click)="setSortOrder('length')">
                   Length
-                  <i class="fa fa-long-arrow-down" *ngIf="orderByColumnName === 'length'" aria-hidden="true"></i>
+                  <i class="fa fa-long-arrow-down" *ngIf="orderByColumnName === 'length' && orderByColumDirection === 'asc'" aria-hidden="true"></i>
+                  <i class="fa fa-long-arrow-up" *ngIf="orderByColumnName === 'length' && orderByColumDirection === 'desc'" aria-hidden="true"></i>
                 </div>
                 <div class="flex-ten sortable" (click)="setSortOrder('tempo')">
                   Tempo
-                  <i class="fa fa-long-arrow-down" *ngIf="orderByColumnName === 'tempo'" aria-hidden="true"></i>
+                  <i class="fa fa-long-arrow-down" *ngIf="orderByColumnName === 'tempo' && orderByColumDirection === 'asc'" aria-hidden="true"></i>
+                  <i class="fa fa-long-arrow-up" *ngIf="orderByColumnName === 'tempo' && orderByColumDirection === 'desc'" aria-hidden="true"></i>
                 </div>
-                <div class="flex-five sortable" (click)="setSortOrder('key')">Key<i class="fa fa-long-arrow-down" *ngIf="orderByColumnName === 'key'" aria-hidden="true"></i></div>
+                <div class="flex-five sortable" (click)="setSortOrder('key')">Key
+                  <i class="fa fa-long-arrow-down" *ngIf="orderByColumnName === 'key' && orderByColumDirection === 'asc'" aria-hidden="true"></i>
+                  <i class="fa fa-long-arrow-up" *ngIf="orderByColumnName === 'key' && orderByColumDirection === 'desc'" aria-hidden="true"></i>
+                </div>
                 <div class="flex-fifteen">&nbsp;</div>
               </div>
               <div class="table-content-wrapper"

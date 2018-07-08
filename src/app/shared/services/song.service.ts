@@ -29,15 +29,15 @@ export class SongService {
       .take(1);
   }
 
-  searchSongs(searchText): Observable<Song[]> {
-    return this._http.get(this.actionUrl + `?search=${searchText}`)
+  searchSongs(searchText, orderCol, orderDirection): Observable<Song[]> {
+    return this._http.get(this.actionUrl + `?search=${searchText}&orderbycol=${orderCol}&orderbydirection=${orderDirection}`)
       .pipe(
         catchError(this.handleError)
       );    
   }
 
-  findAllSongs(startIndex, numberOfSongsToGet): Observable<Song[]> {
-    return this._http.get(this.actionUrl + `?start=${startIndex}&records=${numberOfSongsToGet}`)
+  findAllSongs(startIndex, numberOfSongsToGet, orderCol, orderDirection): Observable<Song[]> {
+    return this._http.get(this.actionUrl + `?start=${startIndex}&records=${numberOfSongsToGet}&orderbycol=${orderCol}&orderbydirection=${orderDirection}`)
       .pipe(
         catchError(this.handleError)
       );
