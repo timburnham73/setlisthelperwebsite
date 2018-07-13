@@ -24,7 +24,7 @@ export class AuthService {
     return true;
   }
 
-  /*updateEmail(emailAddress:string) {
+  updateEmail(emailAddress: string) {
 
     // return this.fromFirebaseAuthPromise(this.authState.auth.updateEmail(emailAddress));
   }
@@ -36,7 +36,7 @@ export class AuthService {
 
   signUp(email, password) {
     // return this.fromFirebaseAuthPromise(this.auth.createUser({email, password}));
-  }*/
+  }
 
   sendPasswordResetEmail(emailAddress){
 
