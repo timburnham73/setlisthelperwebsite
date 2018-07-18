@@ -9,11 +9,11 @@ export class UserService {
   private loggedInUser: User;
 
   constructor(private authService: AuthService) {
-
+    this.actionUrl = 'https://setlisthelper.azurewebsites.net/api/v2.0/Member';
   }
 
-  getUser(userId: string) {
-
+  getUser() {
+    return this._http.get(this.actionUrl);
   }
 
   setLoggedInUser(user) {
