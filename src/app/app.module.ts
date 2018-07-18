@@ -66,6 +66,9 @@ import {
   MatTooltipModule,
 } from '@angular/material';
 import {SetlistSongsComponent} from './setlist-songs';
+import {EditUserComponent} from './account/edit-user/edit-user.component';
+import {UserService} from './shared/services/user.service';
+import {ChangePasswordComponent} from './account/change-password/change-password.component';
 
 @NgModule({
   declarations: [
@@ -86,7 +89,10 @@ import {SetlistSongsComponent} from './setlist-songs';
     SongImportComponent,
     SetlistComponent,
     SetlistEditComponent,
-    SetlistSongsComponent
+    SetlistSongsComponent,
+    EditUserComponent,
+    PasswordResetComponent,
+    ChangePasswordComponent
 
   ],
   imports: [
@@ -111,6 +117,7 @@ import {SetlistSongsComponent} from './setlist-songs';
     appRoutingProviders,
     SongService,
     SetlistService,
+    UserService,
     AuthGuard,
     AuthService,
     SLHHttpClient

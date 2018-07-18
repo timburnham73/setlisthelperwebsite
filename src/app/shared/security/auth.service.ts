@@ -24,7 +24,7 @@ export class AuthService {
     return true;
   }
 
-  /*updateEmail(emailAddress:string) {
+  updateEmail(emailAddress: string) {
 
     // return this.fromFirebaseAuthPromise(this.authState.auth.updateEmail(emailAddress));
   }
@@ -36,7 +36,7 @@ export class AuthService {
 
   signUp(email, password) {
     // return this.fromFirebaseAuthPromise(this.auth.createUser({email, password}));
-  }*/
+  }
 
   sendPasswordResetEmail(emailAddress){
 
@@ -47,7 +47,7 @@ export class AuthService {
     // this.auth.logout();
   }
 
-  login(email, password): Observable<any> {
+  login(username, password): Observable<any> {
     const headers = new Headers();
     const httpOptions = {
       headers: new HttpHeaders({
@@ -55,20 +55,15 @@ export class AuthService {
       })
     };
 
-    const body = 'username=' + email + '&password=' + password + '&grant_type=password';
+    const body = 'username=' + username + '&password=' + password + '&grant_type=password';
 
     return this._http.post('https://setlisthelper.azurewebsites.net/token', body, httpOptions )
       .map((response: Response) => {
         const responseJson: any = response;
+        localStorage.setItem('username', username);
         localStorage.setItem('authToken', responseJson.access_token);
         localStorage.setItem('authTokenExpiration', responseJson.expires_in);
       });
-  }
-
-  setToken(responseJson) {
-    localStorage.setItem('authToken', responseJson.access_token);
-    localStorage.setItem('authTokenExpiration', responseJson.expires_in);
-    return {authToken: responseJson.access_token, authTokenExpiration : responseJson.expires_in};
   }
 
   logout() {

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {Router} from "@angular/router";
+import {Router} from '@angular/router';
 import {AuthService} from '../../shared/security/auth.service';
 
 
@@ -11,8 +11,8 @@ import {AuthService} from '../../shared/security/auth.service';
 })
 export class RegisterComponent  {
 
-  form:FormGroup;
-  public message:string;
+  form: FormGroup;
+  public message: string;
 
   constructor(private fb: FormBuilder,
               private authService: AuthService,

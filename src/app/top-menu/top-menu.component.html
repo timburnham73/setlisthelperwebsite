@@ -20,7 +20,7 @@
       </ul>
       <ul class="nav navbar-top-links navbar-right">
         <li class="dropdown">
-          <a aria-expanded="true" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> {{user?.emailAddress}} <span class="caret"></span></a>
+          <a aria-expanded="true" role="button" href="#" class="dropdown-toggle" data-toggle="dropdown"> {{username}} <span class="caret"></span></a>
           <ul role="menu" class="dropdown-menu">
             <li><a href="javascript:void(0)" (click)="onEditProfile()">Edit Profile</a></li>
             <li><a href="javascript:void(0)" (click)="onChangePassword()">Change Password</a></li>
@@ -37,4 +37,5 @@
     </div>
   </nav>
 </div>
-
+<app-edit-user #editUser></app-edit-user>
+<app-change-password #changePassword></app-change-password>
