@@ -71,11 +71,8 @@ export class EditUserComponent implements OnInit {
     }*/
   }
 
-  save(user: User, isValid: boolean) {
-    if (isValid) {
-      if (user.emailAddress) {
-        this.authService.updateEmail(user.emailAddress);
-      }
+  save(user: User, isValid: boolean) {    
+    if (isValid) {      
       this.userService.updateUser(user);
       this.loadUser();
       this.modal.close();
