@@ -17,6 +17,14 @@ export class User {
 
     }
 
+    public static toJson(data: User) {
+        return {
+          'FirstName': data.firstName,
+          'LastName': data.lastName,
+          'Email': data.emailAddress 
+        };
+      }
+
     static fromJson({
         $key,
         firstName,
