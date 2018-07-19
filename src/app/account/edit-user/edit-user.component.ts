@@ -26,6 +26,7 @@ export class EditUserComponent implements OnInit {
               private authService: AuthService,
               private userService: UserService
               ) {
+    this.user = new User("", "", "", "","","");
   }
 
   ngOnInit() {
