@@ -49,6 +49,11 @@ export class UserService {
   }
 
   updateUser(user: User) {
+    const jsonData = User.toJson(user);
+    return this._http.post(this.actionUrl, jsonData)
+      .pipe(
+        catchError(this.handleError)
+      );
 
   }
 
