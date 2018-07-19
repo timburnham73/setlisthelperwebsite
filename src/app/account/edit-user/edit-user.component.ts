@@ -40,6 +40,7 @@ export class EditUserComponent implements OnInit {
       lastName: ['', [<any>Validators.required, <any>Validators.minLength(1)]],
       role: ['user']
     });    
+    this.loadUser();
   }
 
   loadUser() {
@@ -83,7 +84,7 @@ export class EditUserComponent implements OnInit {
         this.authService.updateEmail(user.emailAddress);
       }
       this.userService.updateUser(user);
-
+      this.loadUser();
       this.modal.close();
     }
   }
@@ -100,7 +101,6 @@ export class EditUserComponent implements OnInit {
   }
 
   open(user: User) {
-    this.loadUser();
     this.modal.open('sm');
   }
 }
