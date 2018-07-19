@@ -19,13 +19,13 @@ export class EditUserComponent implements OnInit {
 
   public myForm: FormGroup;
   public events: any[] = [];
+  private user: User;
 
   constructor(private route: ActivatedRoute,
               private fb: FormBuilder,
               private authService: AuthService,
               private userService: UserService
               ) {
-
   }
 
   ngOnInit() {
@@ -38,16 +38,31 @@ export class EditUserComponent implements OnInit {
       firstName: ['', [<any>Validators.required, <any>Validators.minLength(1)]],
       lastName: ['', [<any>Validators.required, <any>Validators.minLength(1)]],
       role: ['user']
-    });
+    });    
   }
 
-  loadUser(user: User) {
+  loadUser() {
+    this.userService.getUser()
+      .map((data) => {
+        return data;
+      })
+      .subscribe(data => {
+        this.user.firstName = data.firstName;
+        this.user.lastName = data.lastName;
+        this.user.emailAddress = data.emailAddress;
+      });
+
     /*(<FormControl>this.myForm.controls['emailAddress'])
+      .setValue(user.emailAddress, {onlySelf: true});*/
+
+    /*
+    (<FormControl>this.myForm.controls['emailAddress'])
       .setValue(user.emailAddress, {onlySelf: true});
     (<FormControl>this.myForm.controls['firstName'])
       .setValue(user.firstName, {onlySelf: true});
     (<FormControl>this.myForm.controls['lastName'])
-      .setValue(user.lastName, {onlySelf: true});*/
+      .setValue(user.lastName, {onlySelf: true});
+      /*
     //Only allow the user to change their own data.
     /*if(this.authService.id !== user.$key) {
       (<FormControl>this.myForm.controls['firstName']).disable();
@@ -85,7 +100,7 @@ export class EditUserComponent implements OnInit {
   }
 
   open(user: User) {
-    this.loadUser(user);
+    this.loadUser();
     this.modal.open('sm');
   }
 }
