@@ -48,13 +48,12 @@ export class UserService {
 
   }
 
-  updateUser(user: User) {
+  updateUser(user: User): Observable<any> {
     const jsonData = User.toJson(user);
     return this._http.post(this.actionUrl, jsonData)
       .pipe(
         catchError(this.handleError)
       );
-
   }
 
   changePassword(user: User) {
