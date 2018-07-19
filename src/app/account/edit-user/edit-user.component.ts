@@ -52,16 +52,15 @@ export class EditUserComponent implements OnInit {
         this.user.emailAddress = data.Email;
       });
 
-    /*(<FormControl>this.myForm.controls['emailAddress'])
-      .setValue(user.emailAddress, {onlySelf: true});*/
+      alert(this.user.emailAddress);
+    this.myForm.reset();
 
-    /*
     (<FormControl>this.myForm.controls['emailAddress'])
-      .setValue(user.emailAddress, {onlySelf: true});
+      .setValue(this.user.emailAddress, {onlySelf: true});
     (<FormControl>this.myForm.controls['firstName'])
-      .setValue(user.firstName, {onlySelf: true});
+      .setValue(this.user.firstName, {onlySelf: true});
     (<FormControl>this.myForm.controls['lastName'])
-      .setValue(user.lastName, {onlySelf: true});
+      .setValue(this.user.lastName, {onlySelf: true});
     /*
     //Only allow the user to change their own data.
     /*if(this.authService.id !== user.$key) {
