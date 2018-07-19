@@ -47,9 +47,9 @@ export class EditUserComponent implements OnInit {
         return data;
       })
       .subscribe(data => {
-        this.user.firstName = data.firstName;
-        this.user.lastName = data.lastName;
-        this.user.emailAddress = data.emailAddress;
+        this.user.firstName = data.FirstName;
+        this.user.lastName = data.LastName;
+        this.user.emailAddress = data.Email;
       });
 
     /*(<FormControl>this.myForm.controls['emailAddress'])
@@ -62,7 +62,7 @@ export class EditUserComponent implements OnInit {
       .setValue(user.firstName, {onlySelf: true});
     (<FormControl>this.myForm.controls['lastName'])
       .setValue(user.lastName, {onlySelf: true});
-      /*
+    /*
     //Only allow the user to change their own data.
     /*if(this.authService.id !== user.$key) {
       (<FormControl>this.myForm.controls['firstName']).disable();
