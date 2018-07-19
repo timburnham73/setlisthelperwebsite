@@ -54,15 +54,8 @@ export class EditUserComponent implements OnInit {
         this.user.emailAddress = data.Email;
       });
 
-      alert(this.user.emailAddress);
-    this.myForm.reset();
-
-    (<FormControl>this.myForm.controls['emailAddress'])
-      .setValue(this.user.emailAddress, {onlySelf: true});
-    (<FormControl>this.myForm.controls['firstName'])
-      .setValue(this.user.firstName, {onlySelf: true});
-    (<FormControl>this.myForm.controls['lastName'])
-      .setValue(this.user.lastName, {onlySelf: true});
+    
+      
     /*
     //Only allow the user to change their own data.
     /*if(this.authService.id !== user.$key) {
@@ -101,6 +94,15 @@ export class EditUserComponent implements OnInit {
   }
 
   open(user: User) {
+    
+    this.myForm.reset();
+
+    (<FormControl>this.myForm.controls['emailAddress'])
+      .setValue(this.user.emailAddress);
+    (<FormControl>this.myForm.controls['firstName'])
+      .setValue(this.user.firstName, {onlySelf: true});
+    (<FormControl>this.myForm.controls['lastName'])
+      .setValue(this.user.lastName, {onlySelf: true});
     this.modal.open('sm');
   }
 }
