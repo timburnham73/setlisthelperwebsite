@@ -51,22 +51,6 @@ export class EditUserComponent implements OnInit {
       .subscribe(data => {
         this.user = User.fromJson(data);
       });
-
-    
-      
-    /*
-    //Only allow the user to change their own data.
-    /*if(this.authService.id !== user.$key) {
-      (<FormControl>this.myForm.controls['firstName']).disable();
-      (<FormControl>this.myForm.controls['lastName']).disable();
-      (<FormControl>this.myForm.controls['emailAddress']).disable();
-      (<FormControl>this.myForm.controls['role']).enable();
-    }else{
-      (<FormControl>this.myForm.controls['firstName']).enable();
-      (<FormControl>this.myForm.controls['lastName']).enable();
-      (<FormControl>this.myForm.controls['emailAddress']).enable();
-      (<FormControl>this.myForm.controls['role']).disable();
-    }*/
   }
 
   save(user: User, isValid: boolean) {    
@@ -75,8 +59,7 @@ export class EditUserComponent implements OnInit {
         .map((data) => {
           return data;
         })
-        .subscribe(data => {
-          this.user = User.fromJson(data);
+        .subscribe(user => {
         });
 
       this.user = user;
