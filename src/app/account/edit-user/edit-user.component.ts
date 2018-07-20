@@ -71,7 +71,13 @@ export class EditUserComponent implements OnInit {
 
   save(user: User, isValid: boolean) {    
     if (isValid) {      
-      this.userService.updateUser(user);
+      this.userService.updateUser(user)
+        .map((data) => {
+          return data;
+        })
+        .subscribe(data => {
+          this.user = User.fromJson(data);
+        });
       this.loadUser();
       this.modal.close();
     }
