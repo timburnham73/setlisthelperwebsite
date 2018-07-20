@@ -49,9 +49,7 @@ export class EditUserComponent implements OnInit {
         return data;
       })
       .subscribe(data => {
-        this.user.firstName = data.FirstName;
-        this.user.lastName = data.LastName;
-        this.user.emailAddress = data.Email;
+        this.user = User.fromJson(data);
       });
 
     

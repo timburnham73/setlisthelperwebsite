@@ -1,17 +1,13 @@
 import {Injectable, Inject} from '@angular/core';
 
-
 import {Observable} from 'rxjs/Observable';
 import {User} from '../model/user';
 import {AuthService} from '../security/auth.service';
 import {SLHHttpClient} from '../web/HttpClient';
 import {HttpErrorResponse} from '@angular/common/http';
 
-
-
 import {catchError} from 'rxjs/operators';
 import {ErrorObservable} from 'rxjs/observable/ErrorObservable';
-
 
 declare var _: any;
 

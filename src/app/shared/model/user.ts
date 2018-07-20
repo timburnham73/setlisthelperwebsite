@@ -26,20 +26,17 @@ export class User {
       }
 
     static fromJson({
-        $key,
-        firstName,
-        lastName,
-        emailAddress,
-        role,
-        userAccountId
+        FirstName,
+        LastName,
+        Email
     }
     ): User {
         return new User(
-            $key,
-            firstName,
-            lastName,
-            emailAddress,
-            role,
-            userAccountId);
+            "",
+            FirstName,
+            LastName,
+            Email,
+            "",
+            "");
     }
 }
