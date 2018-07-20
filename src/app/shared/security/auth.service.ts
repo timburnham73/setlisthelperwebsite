@@ -24,11 +24,6 @@ export class AuthService {
     return true;
   }
 
-  updateEmail(emailAddress: string) {
-
-    // return this.fromFirebaseAuthPromise(this.authState.auth.updateEmail(emailAddress));
-  }
-
   changePassword(password:string) {
 
     // return this.fromFirebaseAuthPromise(this.authState.auth.updatePassword(password));

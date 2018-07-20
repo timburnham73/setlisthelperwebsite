@@ -19,13 +19,14 @@ export class EditUserComponent implements OnInit {
 
   public myForm: FormGroup;
   public events: any[] = [];
+  private user: User;
 
   constructor(private route: ActivatedRoute,
               private fb: FormBuilder,
               private authService: AuthService,
               private userService: UserService
               ) {
-
+    this.user = new User("", "", "", "","","");
   }
 
   ngOnInit() {
@@ -38,37 +39,30 @@ export class EditUserComponent implements OnInit {
       firstName: ['', [<any>Validators.required, <any>Validators.minLength(1)]],
       lastName: ['', [<any>Validators.required, <any>Validators.minLength(1)]],
       role: ['user']
-    });
+    });    
+    this.loadUser();
   }
 
-  loadUser(user: User) {
-    /*(<FormControl>this.myForm.controls['emailAddress'])
-      .setValue(user.emailAddress, {onlySelf: true});
-    (<FormControl>this.myForm.controls['firstName'])
-      .setValue(user.firstName, {onlySelf: true});
-    (<FormControl>this.myForm.controls['lastName'])
-      .setValue(user.lastName, {onlySelf: true});*/
-    //Only allow the user to change their own data.
-    /*if(this.authService.id !== user.$key) {
-      (<FormControl>this.myForm.controls['firstName']).disable();
-      (<FormControl>this.myForm.controls['lastName']).disable();
-      (<FormControl>this.myForm.controls['emailAddress']).disable();
-      (<FormControl>this.myForm.controls['role']).enable();
-    }else{
-      (<FormControl>this.myForm.controls['firstName']).enable();
-      (<FormControl>this.myForm.controls['lastName']).enable();
-      (<FormControl>this.myForm.controls['emailAddress']).enable();
-      (<FormControl>this.myForm.controls['role']).disable();
-    }*/
+  loadUser() {
+    this.userService.getUser()
+      .map((data) => {
+        return data;
+      })
+      .subscribe(data => {
+        this.user = User.fromJson(data);
+      });
   }
 
-  save(user: User, isValid: boolean) {
-    if (isValid) {
-      if (user.emailAddress) {
-        this.authService.updateEmail(user.emailAddress);
-      }
-      this.userService.updateUser(user);
+  save(user: User, isValid: boolean) {    
+    if (isValid) {      
+      this.userService.updateUser(user)
+        .map((data) => {
+          return data;
+        })
+        .subscribe(user => {
+        });
 
+      this.user = user;
       this.modal.close();
     }
   }
@@ -85,7 +79,15 @@ export class EditUserComponent implements OnInit {
   }
 
   open(user: User) {
-    this.loadUser(user);
+    
+    this.myForm.reset();
+
+    (<FormControl>this.myForm.controls['emailAddress'])
+      .setValue(this.user.emailAddress);
+    (<FormControl>this.myForm.controls['firstName'])
+      .setValue(this.user.firstName, {onlySelf: true});
+    (<FormControl>this.myForm.controls['lastName'])
+      .setValue(this.user.lastName, {onlySelf: true});
     this.modal.open('sm');
   }
 }
