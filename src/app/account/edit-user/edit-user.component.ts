@@ -78,7 +78,8 @@ export class EditUserComponent implements OnInit {
         .subscribe(data => {
           this.user = User.fromJson(data);
         });
-      this.loadUser();
+
+      this.user = user;
       this.modal.close();
     }
   }
