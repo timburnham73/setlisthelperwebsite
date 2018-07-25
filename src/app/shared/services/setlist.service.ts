@@ -71,6 +71,14 @@ export class SetlistService {
     return this.createSetlist(setlist);
   }
 
+  updateSetlistSongs(setlistId: string, setlistSongs: SetlistSong[]) {
+    const postJson = {setlistid: Number(setlistId), songids: setlistSongs.map((setlistSong) => setlistSong.SongId)};
+    return this._http.post(this.setlistSongUrl, postJson)
+      .pipe(
+        catchError(this.handleError)
+      );
+  }
+
   /*getSetlistSongs(SetListId: string) {
     let setlistSongsReturn = [];
     return this.db.list(`/setlistSongs/`, {
@@ -144,14 +152,6 @@ export class SetlistService {
           isBreak: true
         }).key;
 
-  }
-
-  updateSetlistSong(setlistKey: string, setlistSong: SetlistSong) {
-    const setlistSongs$ = this.db.object(`/setlistSongs/${setlistSong.$key}`);
-    return setlistSongs$.update({
-      sequenceNumber: setlistSong.sequenceNumber,
-      displaySequenceNumber: setlistSong.displaySequenceNumber
-    });
   }
 
   removeSetlistSong(setlistKey: string, setlistSong: SetlistSong) {

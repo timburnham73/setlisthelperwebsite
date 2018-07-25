@@ -5,11 +5,11 @@ declare var _: any;
 declare var $: any;
 
 export class SetlistSong extends Song {
-  public setlistSongId: number;
-  public sequenceNumber: number;
+  public SongSetListId: number;
+  public Sequence: number;
   public displaySequenceNumber: number;
-  public songId: number;
-  public setlistId: number;
+  public SongId: number;
+  public SetListId: number;
   public isBreak: boolean;
 
 
@@ -32,12 +32,12 @@ export class SetlistSong extends Song {
       super(songId, name, artist, genre, songKey, length, tempo, deleted, false, notes, other, newDate, 0,
         '', 4, 4, 4, '', '',
         '', '', '', 3, 30, {}, {});
-      this.setlistSongId = setlistSongId;
-      this.sequenceNumber = sequenceNumber;
+      this.SongSetListId = setlistSongId;
+      this.Sequence = sequenceNumber;
       this.displaySequenceNumber = displaySequenceNumber;
       this.isBreak = isBreak;
-      this.songId = songId;
-      this.setlistId = setlistId;
+      this.SongId = songId;
+      this.SetListId = setlistId;
   }
 
 

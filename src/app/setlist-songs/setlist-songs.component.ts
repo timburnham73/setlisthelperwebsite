@@ -57,8 +57,8 @@ export class SetlistSongsComponent implements OnInit {
     this.auth = auth;
     this.startingIndex = 0;
     this.pageSize = 50;
-    this.orderByColumnName = "name";
-    this.orderByColumDirection = "asc";
+    this.orderByColumnName = 'name';
+    this.orderByColumDirection = 'asc';
     const bag: any = this.dragulaService.find('first-bag');
     if (bag !== undefined ) {
       this.dragulaService.destroy('first-bag');
@@ -69,15 +69,15 @@ export class SetlistSongsComponent implements OnInit {
 
     dragulaService.drop.subscribe((value) => {
 
-      const songKeyToMove = $(value[1]).find('input.song-key').val();
-      const songKeyToStartAt = $(value[4]).find('input.song-key').val();
-      //If the song is moved from the same table.
-      if ($(value[2]).attr('id') === $(value[3]).attr('id')) {
-        this.moveSetlistSong(songKeyToMove, songKeyToStartAt);
-      } else {
-        //Add the song from the setlist songs.
-        this.addSongToSetlistAtKey(songKeyToMove, songKeyToStartAt);
-      }
+      const newSongIds = Object.keys(value[2].children).map((key) => {
+        return $(value[2].children[key]).find('.song-key').val();
+      });
+
+      const newOrderedSetlistSongs = newSongIds.map((songId) => {
+        return this.setlistSongs.find((setlistSong) => setlistSong.SongSetListId === Number(songId));
+      });
+      this.reorderSetlistSongs(newOrderedSetlistSongs);
+      this.updateAllSetlistSongs(newOrderedSetlistSongs);
     });
 
     this.term.valueChanges
@@ -171,7 +171,7 @@ export class SetlistSongsComponent implements OnInit {
     if (this.setlistSongs && this.setlistSongs.length > 0) {
       let currentSetlistSongIndex = this.setlistSongs.length - 1;
       let lastSetlistSong: SetlistSong = this.setlistSongs[currentSetlistSongIndex--];
-      sequenceNumber = lastSetlistSong.sequenceNumber + 1;
+      sequenceNumber = lastSetlistSong.Sequence + 1;
 
       //Get the display sequence numbers until they are not -1. -1 is a break.
       displaySequenceNumber = lastSetlistSong.displaySequenceNumber;
@@ -267,15 +267,14 @@ export class SetlistSongsComponent implements OnInit {
       } else {
         setlistSong.displaySequenceNumber = displaySequenceNumber++;
       }
-      setlistSong.sequenceNumber = sequenceNumber++;
+      setlistSong.Sequence = sequenceNumber++;
     }
     return setlistSongs;
   }
 
   updateAllSetlistSongs(setlistSongs: SetlistSong[]) {
-    for (let i = 0; i < setlistSongs.length; i++) {
-      //this.setlistService.updateSetlistSong(this.SetListId, setlistSongs[i]);
-    }
+    this.setlistService.updateSetlistSongs(this.setlistId, setlistSongs)
+      .subscribe(result => console.log(result));
   }
 
   onRowClick(setlistSong) {
@@ -316,58 +315,5 @@ export class SetlistSongsComponent implements OnInit {
     //reorder the songs.
     const setlistSongs: SetlistSong[] = this.reorderSetlistSongs(this.setlistSongs);
     this.updateAllSetlistSongs(setlistSongs);
-  }
-
-  moveSetlistSong(setlistSongKeyToMove, setlistSongKeyToStartAt) {
-    //Do a deep copy of the setlist songs so firebase doesn't update the array while it is in use.
-    const setlistSongs = _.clone(_.sortBy(this.setlistSongs, 'sequenceNumber'), true);
-    //Create a new setlist songs array to batch update at the end of the function.
-    const newSetlistSongs = [];
-
-    let sequenceNumber = 1;
-    const setlistSongsLength = this.setlistSongs.length;
-    let seqNumOfStartToStartAt = -1;
-    let setlistSongToMove: SetlistSong = null;
-    for (let i = 0; i < setlistSongsLength; i++) {
-      const setlistSong: SetlistSong = setlistSongs[i];
-      if (setlistSongKeyToStartAt === setlistSong.setlistSongId ) {
-
-        //The song was moved up
-        if (_.isNull(setlistSongToMove) === true) {
-          seqNumOfStartToStartAt = setlistSong.sequenceNumber;
-          sequenceNumber += 1; //Increment the seq num to make room for the new song.
-        } else {
-          seqNumOfStartToStartAt = setlistSong.sequenceNumber - 1;
-          //The song was moved down
-          sequenceNumber += 1; //Increment the seq num to make room for the new song.
-        }
-      }
-
-      if (setlistSongKeyToMove !== setlistSong.setlistSongId) {//Don't change the song you are moving until the end
-        setlistSong.displaySequenceNumber = sequenceNumber;
-        setlistSong.sequenceNumber = sequenceNumber;
-        newSetlistSongs.push(setlistSong);
-
-        sequenceNumber++;
-      } else {
-        setlistSongToMove = setlistSong;
-      }
-    }
-
-    //If the song is the last song then give it the last sequence number.
-    if (seqNumOfStartToStartAt === -1) {
-      seqNumOfStartToStartAt = sequenceNumber;
-    }
-
-    if (_.isNull(setlistSongToMove) === false) {
-      //Reset the song to move now the we figured out the sequence number.
-      setlistSongToMove.displaySequenceNumber = seqNumOfStartToStartAt;
-      setlistSongToMove.sequenceNumber = seqNumOfStartToStartAt;
-      newSetlistSongs.push(setlistSongToMove);
-    }
-
-    const reorderedSetlistSongs: SetlistSong[] = this.reorderSetlistSongs(newSetlistSongs);
-    this.updateAllSetlistSongs(reorderedSetlistSongs);
-
   }
 }
