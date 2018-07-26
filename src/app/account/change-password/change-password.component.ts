@@ -2,7 +2,7 @@
 
 import {Component, OnInit, ViewChild} from '@angular/core';
 import { BsModalComponent } from 'ng2-bs3-modal/ng2-bs3-modal';
-import {FormGroup, FormBuilder} from '@angular/forms';
+import {FormControl, Validators, FormBuilder, FormGroup} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
 import {PasswordChange} from '../../shared/model/passwordChange';
 import {PasswordChangeService} from '../../shared/services/passwordChange.service';
