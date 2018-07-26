@@ -27,7 +27,7 @@ export class PasswordChange {
         NewPassword,
         ConfirmPassword
     }
-    ): User {
+    ): PasswordChange {
         return new PasswordChange(
             CurrentPassword,
             NewPassword,
