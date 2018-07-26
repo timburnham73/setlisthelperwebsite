@@ -68,6 +68,8 @@ import {
 import {SetlistSongsComponent} from './setlist-songs';
 import {EditUserComponent} from './account/edit-user/edit-user.component';
 import {UserService} from './shared/services/user.service';
+import {PasswordChangeService} from './shared/services/passwordChange.service';
+
 import {ChangePasswordComponent} from './account/change-password/change-password.component';
 
 @NgModule({
@@ -120,7 +122,8 @@ import {ChangePasswordComponent} from './account/change-password/change-password
     UserService,
     AuthGuard,
     AuthService,
-    SLHHttpClient
+    SLHHttpClient,
+    PasswordChangeService
   ],
   bootstrap: [AppComponent]
 })
