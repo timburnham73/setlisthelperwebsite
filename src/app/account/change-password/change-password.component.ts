@@ -36,9 +36,9 @@ export class ChangePasswordComponent implements OnInit {
 
 
     this.myForm = this.fb.group({
-      currentPassword: [''],
-      newPassword: [''],
-      confirmPassword: ['']
+      currentPassword: ['', [<any>Validators.required, <any>Validators.minLength(1)]],
+      newPassword: ['', [<any>Validators.required, <any>Validators.minLength(1)]],
+      confirmPassword: ['', [<any>Validators.required, <any>Validators.minLength(1)]]
     });    
   }
 
