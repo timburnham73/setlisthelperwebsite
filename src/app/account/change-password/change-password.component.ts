@@ -6,6 +6,7 @@ import {FormControl, Validators, FormBuilder, FormGroup} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
 import {PasswordChange} from '../../shared/model/passwordChange';
 import {PasswordChangeService} from '../../shared/services/passwordChange.service';
+import {PasswordChangeResults} from '../../shared/model/passwordChangeResults';
 
 @Component({
   selector: 'app-change-password',
@@ -20,12 +21,14 @@ export class ChangePasswordComponent implements OnInit {
 
   public myForm: FormGroup;
   public passwordModal: PasswordChange;
+  public results: PasswordChangeResults;
 
   constructor(private route: ActivatedRoute,
               private fb: FormBuilder,
               private passwordService: PasswordChangeService
               ) {
     this.passwordModal = new PasswordChange("","","");
+    this.results = new PasswordChangeResults(false,"");
 
   }
 
@@ -49,18 +52,12 @@ export class ChangePasswordComponent implements OnInit {
   }
 
   save(model: any, isValid: boolean) {
-      this.passwordService.changePassword(model)
-      .subscribe(
-        () => this.modal.close(),
-        (error) => this.errorMessage = error
-      );
-
-    /*this.authService.changePassword(model.password)
-      .subscribe(
-        () => this.modal.close(),
-        (error) => this.errorMessage = error
-      );*/
-
+      this.passwordService.changePassword(model).subscribe(data => {
+          this.results = PasswordChangeResults.fromJson(data); 
+          console.log(this.results);
+          console.log(data);
+          this.modal.close();
+        });
   }
 
   isErrorVisible(field: string, error: string) {
