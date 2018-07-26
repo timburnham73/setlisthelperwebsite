@@ -44,11 +44,16 @@ export class ChangePasswordComponent implements OnInit {
 
   isPasswordMatch() {
     const val = this.myForm.value;
-    return val && val.password && val.password == val.confirm;
+    //return val && val.currentPassword != "" && val.newPassword == val.confirmPassword;
+    return true;
   }
 
   save(model: any, isValid: boolean) {
-
+      this.passwordService.changePassword(model)
+      .subscribe(
+        () => this.modal.close(),
+        (error) => this.errorMessage = error
+      );
 
     /*this.authService.changePassword(model.password)
       .subscribe(
