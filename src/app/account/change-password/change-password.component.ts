@@ -4,7 +4,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import { BsModalComponent } from 'ng2-bs3-modal/ng2-bs3-modal';
 import {FormGroup, FormBuilder} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
-
+import {PasswordChange} from '../../shared/model/passwordChange';
 import {PasswordChangeService} from '../../shared/services/passwordChange.service';
 
 @Component({
@@ -19,12 +19,13 @@ export class ChangePasswordComponent implements OnInit {
   public errorMessage: string;
 
   public myForm: FormGroup;
-  public events: any[] = [];
+  public passwordModal: PasswordChange;
 
   constructor(private route: ActivatedRoute,
               private fb: FormBuilder,
               private passwordService: PasswordChangeService
               ) {
+    this.passwordModal = new PasswordChange("","","");
 
   }
 
