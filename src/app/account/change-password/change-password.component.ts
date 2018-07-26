@@ -1,10 +1,11 @@
+
+
 import {Component, OnInit, ViewChild} from '@angular/core';
 import { BsModalComponent } from 'ng2-bs3-modal/ng2-bs3-modal';
 import {FormGroup, FormBuilder} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
 
-import {AuthService} from '../../shared/security/auth.service';
-import {UserService} from '../../shared/services/user.service';
+import {PasswordChangeService} from '../../shared/services/passwordChange.service';
 
 @Component({
   selector: 'app-change-password',
@@ -22,8 +23,8 @@ export class ChangePasswordComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private fb: FormBuilder,
-              private userService: UserService,
-              private authService: AuthService) {
+              private passwordService: PasswordChangeService
+              ) {
 
   }
 
@@ -45,6 +46,7 @@ export class ChangePasswordComponent implements OnInit {
   }
 
   save(model: any, isValid: boolean) {
+
 
     /*this.authService.changePassword(model.password)
       .subscribe(
