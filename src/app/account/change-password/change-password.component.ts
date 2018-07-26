@@ -35,9 +35,10 @@ export class ChangePasswordComponent implements OnInit {
 
 
     this.myForm = this.fb.group({
-      password: [''],
-      confirm: ['']
-    });
+      currentPassword: [''],
+      newPassword: [''],
+      confirmPassword: ['']
+    });    
   }
 
   isPasswordMatch() {
