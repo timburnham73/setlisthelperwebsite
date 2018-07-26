@@ -47,8 +47,7 @@ export class ChangePasswordComponent implements OnInit {
 
   isPasswordMatch() {
     const val = this.myForm.value;
-    //return val && val.currentPassword != "" && val.newPassword == val.confirmPassword;
-    return true;
+    return val && (val.confirmPassword == "" || val.newPassword == val.confirmPassword);
   }
 
   save(model: any, isValid: boolean) {
