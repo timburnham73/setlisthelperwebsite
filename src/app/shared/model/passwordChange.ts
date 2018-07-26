@@ -1,7 +1,7 @@
 
 export class PasswordChange {
     constructor(
-        public currentPassword string,
+        public currentPassword: string,
         public newPassword: string,
         public confirmPassword: string,
     ){
@@ -16,9 +16,9 @@ export class PasswordChange {
 
     public static toJson(data: PasswordChange) {
         return {
-          'CurrentPassword': PasswordChange.currentPassword,
-          'NewPassword': PasswordChange.newPassword,
-          'ConfirmPassword': PasswordChange.confirmPassword 
+          'CurrentPassword': data.currentPassword,
+          'NewPassword': data.newPassword,
+          'ConfirmPassword': data.confirmPassword 
         };
       }
 
