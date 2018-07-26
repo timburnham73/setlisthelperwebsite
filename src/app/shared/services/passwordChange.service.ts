@@ -20,14 +20,13 @@ export class PasswordChangeService {
   }
 
   
-  changePassword(passwordModel: PasswordChange) {
+  changePassword(passwordModel: PasswordChange): Observable<any> {
     const jsonData = PasswordChange.toJson(passwordModel);
     return this._http.put(this.actionUrl, jsonData)
       .pipe(
         catchError(this.handleError)
       );
   }
-
   
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
