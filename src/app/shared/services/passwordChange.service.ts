@@ -1,7 +1,7 @@
 import {Injectable, Inject} from '@angular/core';
 
 import {Observable} from 'rxjs/Observable';
-import {Password} from '../model/passordChange';
+import {PasswordChange} from '../model/passwordChange';
 import {SLHHttpClient} from '../web/HttpClient';
 import {HttpErrorResponse} from '@angular/common/http';
 
@@ -13,7 +13,6 @@ declare var _: any;
 @Injectable()
 export class PasswordChangeService {
   
-  private loggedInUser: User;
   actionUrl: string;
 
   constructor(private _http: SLHHttpClient,) {
@@ -21,7 +20,7 @@ export class PasswordChangeService {
   }
 
   
-  changePassword(passwordModel: Password) {
+  changePassword(passwordModel: PasswordChange) {
     const jsonData = PasswordChange.toJson(passwordModel);
     return this._http.put(this.actionUrl, jsonData)
       .pipe(
