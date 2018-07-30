@@ -22,6 +22,7 @@ export class ChangePasswordComponent implements OnInit {
   public myForm: FormGroup;
   public passwordModal: PasswordChange;
   public results: PasswordChangeResults;
+  public isError: boolean;
 
   constructor(private route: ActivatedRoute,
               private fb: FormBuilder,
@@ -54,17 +55,27 @@ export class ChangePasswordComponent implements OnInit {
       this.passwordService.changePassword(model).subscribe(data => {
           this.results = PasswordChangeResults.fromJson(data); 
           console.log(this.results);
-          console.log(data);
-          this.modal.close();
+          if(this.results.isSuccess){
+            this.passwordModal.currentPassword = "";
+            this.passwordModal.newPassword = "";
+            this.passwordModal.confirmPassword = "";
+            this.isError = false;
+            this.modal.close();  
+          }
+          else{
+            this.isError = true;
+            this.errorMessage = this.results.results ;
+          }
+          
         });
   }
 
   isErrorVisible(field: string, error: string) {
 
-    return this.myForm.controls[field].dirty
-        && this.myForm.controls[field].errors &&
-        this.myForm.controls[field].errors[error];
-
+    //return this.myForm.controls[field].dirty
+    //    && this.myForm.controls[field].errors &&
+    //    this.myForm.controls[field].errors[error];
+    return false;
   }
 
   close() {
