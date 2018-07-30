@@ -7,7 +7,6 @@ import {AuthService} from '../shared/security/auth.service';
 import {SetlistService} from '../shared/services/setlist.service';
 import {SongEditComponent} from '../song-edit';
 import {Setlist} from '../shared/model/setlist';
-import {Account} from '../shared/model/account';
 import {Song} from '../shared/model/song';
 import {SongLyricComponent} from '../song-lyric';
 import {SetlistSong} from '../shared/model/setlist-song';
