@@ -1,7 +1,7 @@
 import {Injectable, Inject} from '@angular/core';
 
 import {Observable} from 'rxjs/Observable';
-import {User} from '../model/user';
+import {PasswordChange} from '../model/passwordChange';
 import {SLHHttpClient} from '../web/HttpClient';
 import {HttpErrorResponse} from '@angular/common/http';
 
@@ -11,51 +11,23 @@ import {ErrorObservable} from 'rxjs/observable/ErrorObservable';
 declare var _: any;
 
 @Injectable()
-export class UserService {
+export class PasswordChangeService {
   
-  private loggedInUser: User;
   actionUrl: string;
 
   constructor(private _http: SLHHttpClient,) {
     this.actionUrl = 'https://setlisthelper.azurewebsites.net/api/v2.0/Member';
   }
 
-  getUser() {
-    return this._http.get(this.actionUrl)
-    .pipe(
-        catchError(this.handleError)
-      );
-  }
-
-  setLoggedInUser(user) {
-    this.loggedInUser = user;
-  }
-
-  getLoggedInUser() {
-    return this.loggedInUser;
-  }
-
-  signUpUser(user: User, password: string) {
-
-  }
-
-  completeUserInvitation(emailAddress: string, userId: string) {
-
-  }
-
-  updateUser(user: User) {
-    const jsonData = User.toJson(user);
-    return this._http.post(this.actionUrl, jsonData)
+  
+  changePassword(passwordModel: PasswordChange): Observable<any> {
+    const jsonData = PasswordChange.toJson(passwordModel);
+    return this._http.put(this.actionUrl, jsonData)
       .pipe(
         catchError(this.handleError)
       );
   }
-
-  changePassword(user: User) {
-
-  }
-
-
+  
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.
