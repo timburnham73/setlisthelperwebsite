@@ -59,6 +59,11 @@ export class ChangePasswordComponent implements OnInit {
             this.passwordModal.currentPassword = "";
             this.passwordModal.newPassword = "";
             this.passwordModal.confirmPassword = "";
+            this.myForm = this.fb.group({
+              currentPassword: ['', [<any>Validators.required, <any>Validators.minLength(1)]],
+              newPassword: ['', [<any>Validators.required, <any>Validators.minLength(1)]],
+              confirmPassword: ['', [<any>Validators.required, <any>Validators.minLength(1)]]
+            });   
             this.isError = false;
             this.modal.close();  
           }
