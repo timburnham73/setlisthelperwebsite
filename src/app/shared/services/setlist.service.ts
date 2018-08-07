@@ -31,7 +31,7 @@ export class SetlistService {
       );
   }
 
-  getSetlist(setlistId: string): Observable<any> {
+  getSetlist(setlistId: number): Observable<any> {
     return this._http.get(`${this.actionUrl}?id=${setlistId}`)
       .pipe(
         catchError(this.handleError)
@@ -71,7 +71,7 @@ export class SetlistService {
     return this.createSetlist(setlist);
   }
 
-  updateSetlistSongs(setlistId: string, setlistSongs: SetlistSong[]) {
+  updateSetlistSongs(setlistId: number, setlistSongs: SetlistSong[]) {
     const postJson = {setlistid: Number(setlistId), songids: setlistSongs.map((setlistSong) => setlistSong.SongId)};
     return this._http.post(this.setlistSongUrl, postJson)
       .pipe(

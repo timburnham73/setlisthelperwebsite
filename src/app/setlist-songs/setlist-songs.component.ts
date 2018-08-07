@@ -38,7 +38,7 @@ export class SetlistSongsComponent implements OnInit {
   setlistSongCount = 0;
   songCountTotal: number;
   breakCount = 0;
-  setlistId: string;
+  setlistId: number;
   private sub: any;
   private songToSearchFor;
   startingIndex: number;
@@ -192,18 +192,41 @@ export class SetlistSongsComponent implements OnInit {
   addSongToSetlist(song) {
 
     const sequenceNumbers = this.getLastSequenceNumbers();
-    const newSetlistSong: SetlistSong = new SetlistSong(-1,
+    const newSetlistSong = new SetlistSong(-1,
       sequenceNumbers.sequenceNumber,
       sequenceNumbers.displaySequenceNumber,
-      song.$key);
+      this.setlistId,
+      song.SongId,
+      false,
+      song);
+    this.setlistSongs.push(newSetlistSong);
 
-    //this.setlistService.addSongToSetlist(this.SetListId, newSetlistSong);
+    this.updateAllSetlistSongs(this.setlistSongs);
 
   }
 
   addBreak() {
     const sequenceNumbers = this.getLastSequenceNumbers();
-    //this.setlistService.addSongBreak(this.SetListId, sequenceNumbers.sequenceNumber, sequenceNumbers.displaySequenceNumber);
+
+    const newSong: Song = Song.createNewSong();
+    newSong.SongType = 1;
+    newSong.Name = 'Break';
+    this.songService.createSong(newSong).do(updatedSong => console.log(`update song ${updatedSong}`))
+      .subscribe(updatedSong => {
+        //this.isSaving = false;
+        const returnSong: Song = Song.fromJson(updatedSong.song);
+        //this.closeModal.emit(returnSong);
+        //this.modal.close();
+        const newSetlistSong = new SetlistSong(-1,
+        sequenceNumbers.sequenceNumber,
+        sequenceNumbers.displaySequenceNumber,
+        this.setlistId,
+        returnSong.SongId,
+        true,
+        returnSong);
+        this.setlistSongs.push(newSetlistSong);
+        this.updateAllSetlistSongs(this.setlistSongs);
+      });
   }
 
   addSongToSetlistAtKey(keyOfSongToAdd, keyOfSongToInsertAt) {
@@ -309,10 +332,10 @@ export class SetlistSongsComponent implements OnInit {
     }
   }
 
-  removeSetlistSong(setlistSong) {
-    //this.setlistService.removeSetlistSong(this.SetListId, setlistSong);
+  removeSetlistSong(setlistSongToRemove) {
+    const filteredSetlistSongs = this.setlistSongs.filter((setlistSong) => setlistSong.SongSetListId !== setlistSongToRemove.SongSetListId);
     //reorder the songs.
-    const setlistSongs: SetlistSong[] = this.reorderSetlistSongs(this.setlistSongs);
-    this.updateAllSetlistSongs(setlistSongs);
+    this.setlistSongs = this.reorderSetlistSongs(filteredSetlistSongs);
+    this.updateAllSetlistSongs(this.setlistSongs);
   }
 }

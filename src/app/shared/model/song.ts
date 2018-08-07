@@ -37,6 +37,7 @@ export class Song {
       '', 'A', 240, 120, false, false, '', '', newDate, 0,
       '', 4, 4, 4, '', '',
       '', '', '', 3, 30, {}, {});
+    newSong.LastEdit = new Date().toISOString();
     return newSong;
   }
   static fromJsonArray(array): Song[] {
@@ -47,7 +48,7 @@ export class Song {
   static toJson(song: Song) {
     return {
       'SongId': song.SongId,
-      'SongType': song.SongType == null ? song.SongType : 0,
+      'SongType': song.SongType !== null ? song.SongType : 0,
       'Name': song.Name ? song.Name : '',
       'ArtistName': song.ArtistName ? song.ArtistName : '',
       'GenreName': song.GenreName ? song.GenreName : '',

@@ -4,14 +4,14 @@ import {Song} from './song';
 declare var _: any;
 declare var $: any;
 
-export class SetlistSong extends Song {
+export class SetlistSong {
   public SongSetListId: number;
   public Sequence: number;
   public displaySequenceNumber: number;
   public SongId: number;
   public SetListId: number;
   public isBreak: boolean;
-
+  public song: Song;
 
   constructor(setlistSongId?: number,
               sequenceNumber?: number,
@@ -19,30 +19,20 @@ export class SetlistSong extends Song {
               setlistId?: number,
               songId?: number,
               isBreak?: boolean,
-              name?: string,
-              artist?: string,
-              genre?: string,
-              songKey?: string,
-              length?: number,
-              tempo?: number,
-              deleted?: boolean,
-              notes?: string,
-              other?: string) {
+              song?: Song) {
       const newDate = new Date().toISOString();
-      super(songId, name, artist, genre, songKey, length, tempo, deleted, false, notes, other, newDate, 0,
-        '', 4, 4, 4, '', '',
-        '', '', '', 3, 30, {}, {});
       this.SongSetListId = setlistSongId;
       this.Sequence = sequenceNumber;
       this.displaySequenceNumber = displaySequenceNumber;
       this.isBreak = isBreak;
       this.SongId = songId;
       this.SetListId = setlistId;
+      this.song = song;
   }
 
 
 
-  static fromJsonArray(array): SetlistSong[] {
+  /*static fromJsonArray(array): SetlistSong[] {
     return array.map(json => SetlistSong.fromJson(json));
 
   }
@@ -86,5 +76,5 @@ export class SetlistSong extends Song {
         deleted,
         notes,
         other);
-  }
+  }*/
 }
